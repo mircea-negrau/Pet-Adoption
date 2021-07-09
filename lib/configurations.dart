@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 Color primaryGreen = const Color(0xFF416D6D);
 // Color primaryGreen = const Color.fromARGB(255, 42, 85, 84);
 List<BoxShadow> shadowList = [
-  BoxShadow(blurRadius: 5, offset: Offset(5, 5), color: Colors.blueGrey.shade400),
+  BoxShadow(blurRadius: 5, offset: const Offset(5, 5), color: Colors.blueGrey.shade400),
 ];
 
 List<Map<String, String>> categories = [
