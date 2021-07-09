@@ -73,37 +73,49 @@ class _HomeScreenState extends State<HomeScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    pet.name,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 28.0,
-                                      color: Colors.grey[700],
+                                  Hero(
+                                    tag: "NAME${pet.id}",
+                                    child: Text(
+                                      pet.name,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 28.0,
+                                        color: Colors.grey[700],
+                                      ),
                                     ),
                                   ),
                                   if (pet.gender == "M")
-                                    Icon(
-                                      FontAwesomeIcons.mars,
-                                      color: Colors.grey[500],
-                                      size: 30.0,
+                                    Hero(
+                                      tag: "GENDER${pet.id}",
+                                      child: Icon(
+                                        FontAwesomeIcons.mars,
+                                        color: Colors.grey[500],
+                                        size: 30.0,
+                                      ),
                                     )
                                   else
-                                    Icon(
-                                      FontAwesomeIcons.venus,
-                                      color: Colors.grey[500],
-                                      size: 30.0,
+                                    Hero(
+                                      tag: "GENDER${pet.id}",
+                                      child: Icon(
+                                        FontAwesomeIcons.venus,
+                                        color: Colors.grey[500],
+                                        size: 30.0,
+                                      ),
                                     )
                                 ],
                               ),
                               Row(
                                 children: [
                                   Flexible(
-                                    child: Text(
-                                      "${pet.breed} ${pet.type}",
-                                      style: TextStyle(
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey[600],
+                                    child: Hero(
+                                      tag: "BREED${pet.id}",
+                                      child: Text(
+                                        "${pet.breed} ${pet.type}",
+                                        style: TextStyle(
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey[600],
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -111,21 +123,27 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               Row(
                                 children: [
-                                  Text(
-                                    "${pet.age} old",
-                                    style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey[500],
+                                  Hero(
+                                    tag: "AGE${pet.id}",
+                                    child: Text(
+                                      "${pet.age} old",
+                                      style: TextStyle(
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey[500],
+                                      ),
                                     ),
                                   )
                                 ],
                               ),
                               Row(
                                 children: [
-                                  Icon(
-                                    Icons.location_on_rounded,
-                                    color: primaryGreen,
+                                  Hero(
+                                    tag: "LOCATION${pet.id}",
+                                    child: Icon(
+                                      Icons.location_on_rounded,
+                                      color: primaryGreen,
+                                    ),
                                   ),
                                   Text(
                                     "Distance: ${pet.distance}",

@@ -44,6 +44,7 @@ List<Pet> petsList = [
     distance: "105 km",
     picture: "assets/pet-dog2.png",
     age: "6.5 years",
+    location: "7 Friedrich Nietzsche Street, Frankfurt",
   ),
   Pet(
     id: "PET002",
@@ -54,6 +55,7 @@ List<Pet> petsList = [
     distance: "3.6 km",
     picture: "assets/pet-cat2.png",
     age: "9 months",
+    location: "15 Petofi Sandor Street, Debrecen",
   ),
   Pet(
     id: "PET003",
@@ -64,6 +66,7 @@ List<Pet> petsList = [
     distance: "350 m",
     picture: "assets/pet-dog1.png",
     age: "1.5 years",
+    location: "17 Alexandru Makedon Street, Oradea",
   ),
   Pet(
     id: "PET004",
@@ -74,6 +77,7 @@ List<Pet> petsList = [
     distance: "7.8 km",
     picture: "assets/pet-cat1.png",
     age: "2 years",
+    location: "5 Bulvarno-Kudriavska Street, Kyiv",
   ),
 ];
 
@@ -86,6 +90,7 @@ class Pet {
   String distance;
   String picture;
   String age;
+  String location;
 
   Pet({
     required this.id,
@@ -96,5 +101,6 @@ class Pet {
     required this.distance,
     required this.picture,
     required this.age,
+    required this.location,
   });
 }
