@@ -81,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         fontWeight: FontWeight.bold,
                                         fontSize: 28.0,
                                         color: Colors.grey[700],
+                                        decoration: TextDecoration.none,
                                       ),
                                     ),
                                   ),
@@ -115,6 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           fontSize: 15.0,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.grey[600],
+                                          decoration: TextDecoration.none,
                                         ),
                                       ),
                                     ),
@@ -131,6 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         fontSize: 14.0,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.grey[500],
+                                        decoration: TextDecoration.none,
                                       ),
                                     ),
                                   )
