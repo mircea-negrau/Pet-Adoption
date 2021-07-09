@@ -138,6 +138,16 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               Row(
                                 children: [
+                                  Flexible(
+                                    child: Text(
+                                      "Distance: ${pet.distance}",
+                                      style: TextStyle(
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey[500],
+                                      ),
+                                    ),
+                                  ),
                                   Hero(
                                     tag: "LOCATION${pet.id}",
                                     child: Icon(
@@ -145,14 +155,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                       color: primaryGreen,
                                     ),
                                   ),
-                                  Text(
-                                    "Distance: ${pet.distance}",
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey[500],
-                                    ),
-                                  )
                                 ],
                               ),
                             ],

@@ -37,14 +37,14 @@ List<DrawerItem> drawerItems = [
 List<Pet> petsList = [
   Pet(
     id: "PET001",
-    name: "Sola",
-    gender: "F",
-    type: "dog",
-    breed: "German Shepherd",
-    distance: "105 km",
-    picture: "assets/pet-dog2.png",
-    age: "6.5 years",
-    location: "7 Friedrich Nietzsche Street, Frankfurt",
+    name: "Rocky",
+    gender: "M",
+    type: "parrot",
+    breed: "Brazilian",
+    distance: "592.1 km",
+    picture: "assets/pet-parrot1.png",
+    age: "2 years",
+    location: "33 Nuevo Street, Rui Rocha",
   ),
   Pet(
     id: "PET002",
@@ -78,6 +78,17 @@ List<Pet> petsList = [
     picture: "assets/pet-cat1.png",
     age: "2 years",
     location: "5 Bulvarno-Kudriavska Street, Kyiv",
+  ),
+  Pet(
+    id: "PET005",
+    name: "Jackson",
+    gender: "M",
+    type: "horse",
+    breed: "French Pure-blood",
+    distance: "107.8 km",
+    picture: "assets/pet-horse1.png",
+    age: "8 years",
+    location: "9 Louvre Street, Paris",
   ),
 ];
 
