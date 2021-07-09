@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-Color primaryGreen = const Color(0xFF416D6D);
+Color primaryGreen = const Color(0xFF2D5557);
+
 List<BoxShadow> shadowList = [
   BoxShadow(
       blurRadius: 5,

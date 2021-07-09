@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_adoption/configurations.dart';
@@ -129,13 +130,18 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 const SizedBox(
                   width: 20.0,
                 ),
-                Text(
-                  "Log out",
-                  style: TextStyle(
-                      color: Colors.white.withOpacity(0.3),
-                      fontFamily: 'Circular',
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold),
+                GestureDetector(
+                  onTap: () {
+                    FirebaseAuth.instance.signOut();
+                  },
+                  child: Text(
+                    "Log out",
+                    style: TextStyle(
+                        color: Colors.white.withOpacity(0.3),
+                        fontFamily: 'Circular',
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
               ],
             ),
