@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:pet_adoption/configurations.dart';
 
 class PetScreen extends StatelessWidget {
-  const PetScreen({Key? key}) : super(key: key);
+  final Pet pet;
+
+  const PetScreen({Key? key, required this.pet}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +50,8 @@ class PetScreen extends StatelessWidget {
             Align(
               alignment: Alignment.topCenter,
               child: Hero(
-                tag: 1,
-                child: Image.asset("assets/pet-cat2.png"),
+                tag: pet.id,
+                child: Image.asset(pet.picture),
               ),
             ),
             Align(
@@ -65,7 +67,7 @@ class PetScreen extends StatelessWidget {
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 20.0),
+                margin: const EdgeInsets.symmetric(horizontal: 20.0),
                 height: 150.0,
                 decoration: BoxDecoration(
                   color: Colors.grey[300],

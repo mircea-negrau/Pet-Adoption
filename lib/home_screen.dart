@@ -20,17 +20,147 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isFilterOpen = false;
   int selectedIndex = 0;
 
+  List<Widget> getPetOverviews() {
+    return petsList
+        .map((pet) => GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PetScreen(pet: pet)));
+              },
+              child: Container(
+                height: 270,
+                margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 194, 205, 209),
+                                borderRadius: BorderRadius.circular(20.0),
+                                boxShadow: shadowList),
+                            margin: const EdgeInsets.only(top: 40.0),
+                          ),
+                          Align(
+                            child: Hero(
+                              tag: pet.id,
+                              child: Image.asset(pet.picture),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 60.0, bottom: 20.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: shadowList,
+                          borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(20.0),
+                              bottomRight: Radius.circular(20.0)),
+                        ),
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(15.0, 28.0, 15.0, 28.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    pet.name,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 28.0,
+                                      color: Colors.grey[700],
+                                    ),
+                                  ),
+                                  if (pet.gender == "M")
+                                    Icon(
+                                      FontAwesomeIcons.mars,
+                                      color: Colors.grey[500],
+                                      size: 30.0,
+                                    )
+                                  else
+                                    Icon(
+                                      FontAwesomeIcons.venus,
+                                      color: Colors.grey[500],
+                                      size: 30.0,
+                                    )
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      "${pet.breed} ${pet.type}",
+                                      style: TextStyle(
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${pet.age} old",
+                                    style: TextStyle(
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey[500],
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.location_on_rounded,
+                                    color: primaryGreen,
+                                  ),
+                                  Text(
+                                    "Distance: ${pet.distance}",
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey[500],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ))
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      child: AnimatedContainer(
-        transform: Matrix4.translationValues(xOffset, yOffset, 0)
-          ..scale(scaleFactor),
-        duration: const Duration(milliseconds: 250),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(isDrawerOpen ? 70.0 : 0.0),
-          color: Colors.grey[100],
-        ),
+    return AnimatedContainer(
+      transform: Matrix4.translationValues(xOffset, yOffset, 0)
+        ..scale(scaleFactor),
+      duration: const Duration(milliseconds: 250),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(isDrawerOpen ? 70.0 : 0.0),
+        color: Colors.grey[100],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(isDrawerOpen ? 70.0 : 0.0),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -203,135 +333,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 );
                               }),
                         ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const PetScreen()));
-                        },
-                        child: Container(
-                          height: 240,
-                          margin: EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color: Colors.blueGrey,
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                          boxShadow: shadowList),
-                                      margin: const EdgeInsets.only(top: 40.0),
-                                    ),
-                                    Align(
-                                      child: Hero(
-                                          tag: 1,
-                                          child: Image.asset(
-                                              'assets/pet-cat2.png')),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Container(
-                                  margin: const EdgeInsets.only(
-                                      top: 60.0, bottom: 20.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: shadowList,
-                                    borderRadius: const BorderRadius.only(
-                                        topRight: Radius.circular(20.0),
-                                        bottomRight: Radius.circular(20.0)),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 240,
-                        margin: EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.orange[100],
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                        boxShadow: shadowList),
-                                    margin: const EdgeInsets.only(top: 40.0),
-                                  ),
-                                  Align(
-                                    child: Image.asset('assets/pet-cat1.png'),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                margin: const EdgeInsets.only(
-                                    top: 60.0, bottom: 20.0),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  boxShadow: shadowList,
-                                  borderRadius: const BorderRadius.only(
-                                      topRight: Radius.circular(20.0),
-                                      bottomRight: Radius.circular(20.0)),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: 240,
-                        margin: EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.orange[100],
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                        boxShadow: shadowList),
-                                    margin: const EdgeInsets.only(top: 40.0),
-                                  ),
-                                  Align(
-                                    child: Image.asset('assets/pet-cat1.png'),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                margin: const EdgeInsets.only(
-                                    top: 60.0, bottom: 20.0),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  boxShadow: shadowList,
-                                  borderRadius: const BorderRadius.only(
-                                      topRight: Radius.circular(20.0),
-                                      bottomRight: Radius.circular(20.0)),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      ...getPetOverviews(),
+                      const SizedBox(height: 50.0),
                     ],
                   ),
                 ),
-                const SizedBox(height: 70.0),
               ],
             ),
           ),
