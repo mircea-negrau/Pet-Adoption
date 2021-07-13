@@ -14,7 +14,7 @@ class BottomButtons extends StatelessWidget {
           width: 70.0,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25.0),
-            color: primaryGreen,
+            color: primaryYellow,
             boxShadow: [
               BoxShadow(
                 blurRadius: 5,
@@ -33,7 +33,7 @@ class BottomButtons extends StatelessWidget {
           child: Container(
             height: 60,
             decoration: BoxDecoration(
-              color: primaryGreen,
+              color: primaryYellow,
               borderRadius: BorderRadius.circular(25.0),
               boxShadow: [
                 BoxShadow(

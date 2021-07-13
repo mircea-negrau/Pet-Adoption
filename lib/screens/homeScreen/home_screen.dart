@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_adoption/configurations.dart';
+import 'package:pet_adoption/models/pet.dart';
 import 'package:pet_adoption/models/user.dart';
 import 'package:pet_adoption/screens/homeScreen/components/pets_feed.dart';
 import 'package:pet_adoption/screens/petScreen/pet_screen.dart';

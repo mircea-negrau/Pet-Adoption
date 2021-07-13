@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pet_adoption/configurations.dart';
 import 'package:pet_adoption/models/user.dart';
 
 class TopAccountDetails extends StatelessWidget {
@@ -15,20 +16,26 @@ class TopAccountDetails extends StatelessWidget {
         Text(
           user.name == null ? "John Smith" : user.name.toString(),
           style: const TextStyle(
-            color: Colors.white70,
+            color: Colors.white,
             fontWeight: FontWeight.bold,
             fontFamily: 'Circular',
             fontSize: 17.0,
           ),
         ),
         const SizedBox(height: 2.0),
-        Text(
-          "Online",
-          style: TextStyle(
-            color: Colors.white.withOpacity(0.3),
-            fontSize: 13.0,
-            fontFamily: 'Circular',
-          ),
+        Row(
+          children: [
+            CircleAvatar(backgroundColor: primaryGreen, radius: 5.0),
+            const SizedBox(width: 5.0),
+            Text(
+              "Online",
+              style: TextStyle(
+                color: primaryGrey,
+                fontSize: 13.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
       ])
     ]);

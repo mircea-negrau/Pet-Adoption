@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pet_adoption/configurations.dart';
+import 'package:pet_adoption/models/pet.dart';
 
 class PetDetails extends StatelessWidget {
   final Pet pet;
@@ -103,7 +104,7 @@ class PetDetails extends StatelessWidget {
                     tag: "LOCATION${pet.id}",
                     child: Icon(
                       Icons.location_on_rounded,
-                      color: primaryGreen,
+                      color: primaryYellow,
                     ),
                   ),
                   const SizedBox(width: 10.0),

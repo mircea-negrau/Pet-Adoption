@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pet_adoption/configurations.dart';
+import 'package:pet_adoption/models/drawer_item.dart';
 
 class NavBarItem extends StatelessWidget {
   final int selectedItem;
@@ -15,7 +16,7 @@ class NavBarItem extends StatelessWidget {
         item.icon,
         color: selectedItem == item.id
             ? Colors.white
-            : Colors.white.withOpacity(0.3),
+            : Colors.white.withOpacity(0.5),
         size: 20.0,
       ),
       const SizedBox(width: 30.0),
@@ -24,7 +25,7 @@ class NavBarItem extends StatelessWidget {
         style: TextStyle(
             color: selectedItem == item.id
                 ? Colors.white
-                : Colors.white.withOpacity(0.3),
+                : Colors.white.withOpacity(0.5),
             fontFamily: 'Circular',
             fontWeight: FontWeight.bold,
             fontSize: 20.0),

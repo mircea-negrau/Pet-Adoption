@@ -1,3 +1,4 @@
+import 'package:pet_adoption/models/drawer_item.dart';
 import 'package:pet_adoption/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
   Widget build(BuildContext context) {
     final User user = widget.user;
     return Container(
-      color: primaryGreen,
+      color: primaryYellow,
       padding: const EdgeInsets.only(top: 30.0, bottom: 30.0, left: 20.0),
       child: SafeArea(
         child: Column(

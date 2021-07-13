@@ -9,13 +9,13 @@ class BottomNavBar extends StatelessWidget {
     return Row(children: [
       Icon(
         Icons.settings,
-        color: Colors.white.withOpacity(0.3),
+        color: Colors.white.withOpacity(0.5),
       ),
       const SizedBox(width: 20.0),
       Text(
         "Settings",
         style: TextStyle(
-          color: Colors.white.withOpacity(0.3),
+          color: Colors.white.withOpacity(0.5),
           fontFamily: 'Circular',
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
@@ -25,7 +25,7 @@ class BottomNavBar extends StatelessWidget {
       Container(
         width: 2.0,
         height: 20.0,
-        color: Colors.white.withOpacity(0.3),
+        color: Colors.white.withOpacity(0.5),
       ),
       const SizedBox(width: 20.0),
       GestureDetector(
@@ -35,7 +35,7 @@ class BottomNavBar extends StatelessWidget {
         child: Text(
           "Log out",
           style: TextStyle(
-            color: Colors.white.withOpacity(0.3),
+            color: Colors.white.withOpacity(0.5),
             fontFamily: 'Circular',
             fontSize: 18.0,
             fontWeight: FontWeight.bold,

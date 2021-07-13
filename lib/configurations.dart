@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pet_adoption/models/drawer_item.dart';
+import 'package:pet_adoption/models/pet.dart';
 
-Color primaryGreen = const Color(0xFF2D5557);
+Color primaryYellow = const Color(0xFFECCB57);
+Color primaryGreen = const Color(0xFF5C946E);
+Color primaryGrey = const Color(0xFF170312).withOpacity(0.5);
 
 List<BoxShadow> shadowList = [
   BoxShadow(
-      blurRadius: 5,
-      offset: const Offset(5, 5),
-      color: Colors.grey.shade400),
+      blurRadius: 5, offset: const Offset(5, 5), color: Colors.grey.shade400),
 ];
 
 List<Map<String, String>> categories = [
@@ -17,14 +19,6 @@ List<Map<String, String>> categories = [
   {'name': 'Parrots', 'iconPath': 'assets/parrot.png'},
   {'name': 'Horses', 'iconPath': 'assets/horse.png'},
 ];
-
-class DrawerItem {
-  int id;
-  String title;
-  IconData icon;
-
-  DrawerItem({required this.id, required this.icon, required this.title});
-}
 
 List<DrawerItem> drawerItems = [
   DrawerItem(id: 0, icon: FontAwesomeIcons.paw, title: 'Adoption'),
@@ -92,27 +86,3 @@ List<Pet> petsList = [
     location: "9 Louvre Street, Paris",
   ),
 ];
-
-class Pet {
-  String id;
-  String name;
-  String gender;
-  String type;
-  String breed;
-  String distance;
-  String picture;
-  String age;
-  String location;
-
-  Pet({
-    required this.id,
-    required this.name,
-    required this.gender,
-    required this.type,
-    required this.breed,
-    required this.distance,
-    required this.picture,
-    required this.age,
-    required this.location,
-  });
-}

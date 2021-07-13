@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pet_adoption/configurations.dart';
+import 'package:pet_adoption/models/pet.dart';
 
 class PetCard extends StatelessWidget {
   final Function openPet;

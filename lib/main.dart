@@ -44,7 +44,6 @@ class App extends StatelessWidget {
             home: const Setup(),
             theme: ThemeData(
               fontFamily: 'Circular',
-              primaryColor: const Color(0xFF416D6D),
             ),
           ),
         );

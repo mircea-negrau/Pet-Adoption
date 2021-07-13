@@ -25,18 +25,13 @@ class LocationBar extends StatelessWidget {
 
   Row createLocationBar() {
     return Row(children: [
-      Icon(
-        Icons.location_on_rounded,
-        color: primaryGreen,
-      ),
-      const SizedBox(width: 5.0),
       RichText(
         text: TextSpan(
             text: "$city, ",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 17.0,
-              color: primaryGreen,
+              color: primaryYellow,
             ),
             children: [
               TextSpan(
@@ -54,7 +49,7 @@ class LocationBar extends StatelessWidget {
       Text(
         "Location",
         style: TextStyle(
-          color: primaryGreen.withOpacity(0.4),
+          color: primaryGrey,
           fontSize: 16.0,
         ),
       ),

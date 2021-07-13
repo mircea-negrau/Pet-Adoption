@@ -33,7 +33,7 @@ class FilterBar extends StatelessWidget {
                       margin: const EdgeInsets.only(left: 20),
                       decoration: BoxDecoration(
                         color: selectedIndex.contains(index)
-                            ? primaryGreen
+                            ? primaryYellow
                             : Colors.white,
                         boxShadow: shadowList,
                         borderRadius: BorderRadius.circular(10),

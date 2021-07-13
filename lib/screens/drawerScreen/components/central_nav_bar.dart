@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pet_adoption/configurations.dart';
+import 'package:pet_adoption/models/drawer_item.dart';
 import 'package:pet_adoption/screens/drawerScreen/components/central_nav_bar_item.dart';
 
 class CentralNavBar extends StatelessWidget {
