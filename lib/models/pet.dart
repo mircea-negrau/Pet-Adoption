@@ -7,6 +7,9 @@ class Pet {
   String picture;
   String age;
   String location;
+  String ownerID;
+  String addedDate;
+  String description;
 
   Pet({
     required this.id,
@@ -17,5 +20,8 @@ class Pet {
     required this.picture,
     required this.age,
     required this.location,
+    required this.ownerID,
+    required this.addedDate,
+    required this.description,
   });
 }

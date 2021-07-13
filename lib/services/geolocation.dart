@@ -20,4 +20,11 @@ class GeolocationService {
     setCountry(first.countryName);
     setLocationLoaded();
   }
+
+  Future<void> getLocationName (double latitude, double longitude) async {
+    final coordinates = Coordinates(latitude, longitude);
+    final addresses =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    print(addresses.first.locality);
+  }
 }

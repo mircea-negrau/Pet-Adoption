@@ -77,8 +77,11 @@ class PetScreen extends StatelessWidget {
                 child: const BottomButtons(),
               ),
             ),
-            const Align(
-              child: OwnerDescription(),
+            Align(
+              child: OwnerDescription(
+                  ownerID: pet.ownerID,
+                  date: pet.addedDate,
+                  description: pet.description),
             ),
           ],
         ),
