@@ -3,15 +3,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pet_adoption/screens/drawer_screen.dart';
-import 'package:pet_adoption/screens/home_screen.dart';
+import 'package:pet_adoption/screens/drawerScreen/drawer_screen.dart';
+import 'package:pet_adoption/screens/homeScreen/home_screen.dart';
 import 'package:pet_adoption/models/user.dart';
-import 'package:pet_adoption/screens/login_screen.dart';
+import 'package:pet_adoption/screens/loginScreen/login_screen.dart';
 import 'package:pet_adoption/services/authentication.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(App());
+  runApp(const App());
 }
 
 class App extends StatelessWidget {
@@ -59,7 +59,7 @@ class Setup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    if (user == null || user.uid == "-1") return const Login();
+    if (user == null) return const Login();
     return Home();
   }
 }
@@ -67,16 +67,12 @@ class Setup extends StatelessWidget {
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // var user = Provider.of<User>(context);
-    // if (user != null)
-    //   print("From home ${user.uid}");
-    // else
-    //   print("NULL");
+    final user = Provider.of<User>(context);
     return Scaffold(
       body: Stack(
-        children: const [
-          DrawerScreen(),
-          HomeScreen(),
+        children: [
+          DrawerScreen(user: user),
+          HomeScreen(user: user),
         ],
       ),
     );
