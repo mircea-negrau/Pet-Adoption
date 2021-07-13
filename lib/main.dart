@@ -63,15 +63,33 @@ class Setup extends StatelessWidget {
   }
 }
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  int selectedView = 0;
+
+  void setView(int index) {
+    setState(() {
+      selectedView = index;
+    });
+  }
+
+  int getView() {
+    return selectedView;
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
+
     return Scaffold(
       body: Stack(
         children: [
-          DrawerScreen(user: user),
-          HomeScreen(user: user),
+          DrawerScreen(user: user, setter: setView, getter: getView),
+          HomeScreen(user: user, setter: setView, getter: getView),
         ],
       ),
     );

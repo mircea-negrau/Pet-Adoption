@@ -9,19 +9,24 @@ import 'package:pet_adoption/screens/drawerScreen/components/central_nav_bar.dar
 
 class DrawerScreen extends StatefulWidget {
   final User user;
+  final Function setter;
+  final Function getter;
 
-  const DrawerScreen({Key? key, required this.user}) : super(key: key);
+  const DrawerScreen(
+      {Key? key,
+      required this.user,
+      required this.setter,
+      required this.getter})
+      : super(key: key);
 
   @override
   _DrawerScreenState createState() => _DrawerScreenState();
 }
 
 class _DrawerScreenState extends State<DrawerScreen> {
-  int selectedItem = 0;
-
   bool setSelectedItem(DrawerItem item) {
     setState(() {
-      selectedItem = item.id;
+      widget.setter(item.id);
     });
     return true;
   }
@@ -29,6 +34,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
   @override
   Widget build(BuildContext context) {
     final User user = widget.user;
+    final int selectedItem = widget.getter() as int;
     return Container(
       color: primaryYellow,
       padding: const EdgeInsets.only(top: 30.0, bottom: 30.0, left: 20.0),

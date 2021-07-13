@@ -11,8 +11,15 @@ import 'components/top_nav_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   final User user;
+  final Function setter;
+  final Function getter;
 
-  const HomeScreen({Key? key, required this.user}) : super(key: key);
+  const HomeScreen(
+      {Key? key,
+      required this.user,
+      required this.setter,
+      required this.getter})
+      : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -28,8 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
   bool locationLoaded = false;
   bool petsLoaded = false;
 
-  List<int> selectedIndex = [];
-  List<Pet> pets = [];
+  List<Pet> allPets = [];
+  List<int> selectedFilterIndexes = [];
   List<Pet> filteredPets = [];
 
   late String city = "";
@@ -88,20 +95,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void editFilters(int index) {
     setState(() {
-      if (selectedIndex.contains(index)) {
-        selectedIndex.remove(index);
+      if (selectedFilterIndexes.contains(index)) {
+        selectedFilterIndexes.remove(index);
       } else {
-        selectedIndex.insert(0, index);
+        selectedFilterIndexes.insert(0, index);
       }
-      if (selectedIndex.isEmpty) {
-        filteredPets = pets;
+      if (selectedFilterIndexes.isEmpty) {
+        filteredPets = allPets;
       } else {
         final List<String> activeFilters = [];
-        for (final int index in selectedIndex) {
+        for (final int index in selectedFilterIndexes) {
           activeFilters.add(config.filtersName[index]!);
         }
         final List<Pet> newList = [];
-        for (final Pet pet in pets) {
+        for (final Pet pet in allPets) {
           if (activeFilters.contains(pet.type)) {
             newList.add(pet);
           }
@@ -112,16 +119,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> fetchPets() async {
-    pets = await CloudFirestore().fetchPets();
+    allPets = await CloudFirestore().fetchPets();
     setState(() {
-      filteredPets = pets;
+      filteredPets = allPets;
       petsLoaded = true;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final User user = widget.user;
     return AnimatedContainer(
       constraints: const BoxConstraints.expand(),
       transform: Matrix4.translationValues(xOffset, yOffset, 0)
@@ -135,56 +141,83 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.circular(isDrawerOpen ? 70.0 : 0.0),
         child: SafeArea(
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(height: 20.0),
-                TopNavBar(
-                  openDrawer: openDrawer,
-                  locationLoaded: locationLoaded,
-                  country: country,
-                  setCountry: setCountry,
-                  isDrawerOpen: isDrawerOpen,
-                  user: user,
-                  isLocationSet: isLocationSet,
-                  city: city,
-                  closeDrawer: closeDrawer,
-                  setCity: setCity,
-                  setLocationLoaded: setLocationLoaded,
-                ),
-                const SizedBox(height: 20.0),
-                if (!petsLoaded)
-                  FutureBuilder(
-                      future: fetchPets(),
-                      builder:
-                          (BuildContext context, AsyncSnapshot<void> snapshot) {
-                        if (snapshot.hasError) {
-                          return ErrorWidget(snapshot.hasError);
-                        }
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          return createPetsFeed(user: user);
-                        }
-                        return Shimmer.fromColors(
-                          baseColor: Colors.grey.shade300,
-                          highlightColor: Colors.grey.shade100,
-                          child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 150.0,
-                                  height: 15.0,
-                                  color: Colors.white,
-                                ),
-                              ]),
-                        );
-                      })
-                else
-                  createPetsFeed(user: user),
-              ],
-            ),
+            child: fetchView(),
           ),
         ),
       ),
     );
+  }
+
+  Widget fetchView() {
+    final User user = widget.user;
+    final int selectedMenuIndex = widget.getter() as int;
+    if (selectedMenuIndex == 0) {
+      return Column(
+        children: [
+          const SizedBox(height: 20.0),
+          TopNavBar(
+            openDrawer: openDrawer,
+            locationLoaded: locationLoaded,
+            country: country,
+            setCountry: setCountry,
+            isDrawerOpen: isDrawerOpen,
+            user: user,
+            isLocationSet: isLocationSet,
+            city: city,
+            closeDrawer: closeDrawer,
+            setCity: setCity,
+            setLocationLoaded: setLocationLoaded,
+          ),
+          const SizedBox(height: 20.0),
+          if (!petsLoaded)
+            FutureBuilder(
+                future: fetchPets(),
+                builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                  if (snapshot.hasError) {
+                    return ErrorWidget(snapshot.hasError);
+                  }
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return createPetsFeed(user: user);
+                  }
+                  return Shimmer.fromColors(
+                    baseColor: Colors.grey.shade300,
+                    highlightColor: Colors.grey.shade100,
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 150.0,
+                            height: 15.0,
+                            color: Colors.white,
+                          ),
+                        ]),
+                  );
+                })
+          else
+            createPetsFeed(user: user),
+        ],
+      );
+    } else {
+      return Column(
+        children: [
+          const SizedBox(height: 20.0),
+          TopNavBar(
+            openDrawer: openDrawer,
+            locationLoaded: locationLoaded,
+            country: country,
+            setCountry: setCountry,
+            isDrawerOpen: isDrawerOpen,
+            user: user,
+            isLocationSet: isLocationSet,
+            city: city,
+            closeDrawer: closeDrawer,
+            setCity: setCity,
+            setLocationLoaded: setLocationLoaded,
+          ),
+          const SizedBox(height: 20.0),
+        ],
+      );
+    }
   }
 
   PetsFeed createPetsFeed({required User user}) {
@@ -201,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
       setCity: setCity,
       setLocationLoaded: setLocationLoaded,
       editFilters: editFilters,
-      selectedIndex: selectedIndex,
+      selectedIndex: selectedFilterIndexes,
       isFilterOpen: isFilterOpen,
       openPet: openPet,
       toggleFilter: toggleFilter,
