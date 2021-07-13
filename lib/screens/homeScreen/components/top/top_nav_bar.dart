@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pet_adoption/models/user.dart';
-import 'package:pet_adoption/screens/homeScreen/components/drawer_button.dart';
-import 'package:pet_adoption/screens/homeScreen/components/location_bar.dart';
-import 'package:pet_adoption/screens/homeScreen/components/profile_icon.dart';
+import 'package:pet_adoption/screens/homeScreen/components/top/components/drawer_button.dart';
+import 'package:pet_adoption/screens/homeScreen/components/top/components/location_bar.dart';
+import 'package:pet_adoption/screens/homeScreen/components/top/components/profile_icon.dart';
 
 class TopNavBar extends StatelessWidget {
   final bool isDrawerOpen;

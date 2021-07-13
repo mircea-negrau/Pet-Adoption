@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pet_adoption/models/pet.dart';
 import 'package:pet_adoption/models/user.dart';
-import 'package:pet_adoption/screens/homeScreen/components/filter_bar.dart';
-import 'package:pet_adoption/screens/homeScreen/components/pet_card.dart';
-import 'package:pet_adoption/screens/homeScreen/components/search_bar.dart';
+import 'package:pet_adoption/screens/homeScreen/components/adoption_screen/filter_bar.dart';
+import 'package:pet_adoption/screens/homeScreen/components/adoption_screen/pet_card.dart';
+import 'package:pet_adoption/screens/homeScreen/components/adoption_screen/search_bar.dart';
 
 class PetsFeed extends StatelessWidget {
   final bool isDrawerOpen;

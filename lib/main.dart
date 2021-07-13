@@ -70,6 +70,10 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int selectedView = 0;
+  double xOffset = 0;
+  double yOffset = 0;
+  double scaleFactor = 1;
+  bool isDrawerOpen = false;
 
   void setView(int index) {
     setState(() {
@@ -81,6 +85,40 @@ class _HomeState extends State<Home> {
     return selectedView;
   }
 
+  void openDrawer() {
+    setState(() {
+      xOffset = 275;
+      yOffset = 125;
+      scaleFactor = 0.7;
+      isDrawerOpen = true;
+    });
+  }
+
+  void closeDrawer() {
+    setState(() {
+      xOffset = 0;
+      yOffset = 0;
+      scaleFactor = 1;
+      isDrawerOpen = false;
+    });
+  }
+
+  bool getDrawerStatus() {
+    return isDrawerOpen;
+  }
+
+  double getScaleFactor() {
+    return scaleFactor;
+  }
+
+  double getOffsetY() {
+    return yOffset;
+  }
+
+  double getOffsetX() {
+    return xOffset;
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
@@ -88,8 +126,23 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: Stack(
         children: [
-          DrawerScreen(user: user, setter: setView, getter: getView),
-          HomeScreen(user: user, setter: setView, getter: getView),
+          DrawerScreen(
+              user: user,
+              setView: setView,
+              getView: getView,
+              openDrawer: openDrawer,
+              closeDrawer: closeDrawer),
+          HomeScreen(
+            user: user,
+            setView: setView,
+            getView: getView,
+            openDrawer: openDrawer,
+            closeDrawer: closeDrawer,
+            isDrawerOpen: getDrawerStatus,
+            getScaleFactor: getScaleFactor,
+            getOffsetY: getOffsetY,
+            getOffsetX: getOffsetX,
+          ),
         ],
       ),
     );

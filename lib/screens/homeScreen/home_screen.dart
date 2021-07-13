@@ -2,23 +2,35 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_adoption/models/pet.dart';
 import 'package:pet_adoption/models/user.dart';
-import 'package:pet_adoption/screens/homeScreen/components/pets_feed.dart';
+import 'package:pet_adoption/screens/homeScreen/components/adoption_screen/pets_feed.dart';
+import 'package:pet_adoption/screens/homeScreen/components/top/top_nav_bar.dart';
 import 'package:pet_adoption/screens/petScreen/pet_screen.dart';
 import 'package:pet_adoption/services/cloud_firestore.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:pet_adoption/configurations.dart' as config;
-import 'components/top_nav_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   final User user;
-  final Function setter;
-  final Function getter;
+  final Function setView;
+  final Function getView;
+  final Function isDrawerOpen;
+  final Function openDrawer;
+  final Function closeDrawer;
+  final Function getOffsetX;
+  final Function getOffsetY;
+  final Function getScaleFactor;
 
   const HomeScreen(
       {Key? key,
       required this.user,
-      required this.setter,
-      required this.getter})
+      required this.setView,
+      required this.getView,
+      required this.openDrawer,
+      required this.closeDrawer,
+      required this.isDrawerOpen,
+      required this.getOffsetX,
+      required this.getOffsetY,
+      required this.getScaleFactor})
       : super(key: key);
 
   @override
@@ -26,11 +38,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  double xOffset = 0;
-  double yOffset = 0;
-  double scaleFactor = 1;
-
-  bool isDrawerOpen = false;
   bool isFilterOpen = true;
   bool locationLoaded = false;
   bool petsLoaded = false;
@@ -45,24 +52,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void openPet(Pet pet) {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => PetScreen(pet: pet)));
-  }
-
-  void openDrawer() {
-    xOffset = 275;
-    yOffset = 125;
-    scaleFactor = 0.7;
-    setState(() {
-      isDrawerOpen = true;
-    });
-  }
-
-  void closeDrawer() {
-    xOffset = 0;
-    yOffset = 0;
-    scaleFactor = 1;
-    setState(() {
-      isDrawerOpen = false;
-    });
   }
 
   bool isLocationSet() {
@@ -128,105 +117,143 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final double xOffset = widget.getOffsetX() as double;
+    final double yOffset = widget.getOffsetY() as double;
+    final double scaleFactor = widget.getScaleFactor() as double;
+    final Function isDrawerOpen = widget.isDrawerOpen;
+    final Function openDrawer = widget.openDrawer;
+    final Function closeDrawer = widget.closeDrawer;
+    final bool drawerIsOpen = isDrawerOpen() as bool;
     return AnimatedContainer(
       constraints: const BoxConstraints.expand(),
       transform: Matrix4.translationValues(xOffset, yOffset, 0)
         ..scale(scaleFactor),
       duration: const Duration(milliseconds: 250),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(isDrawerOpen ? 70.0 : 0.0),
+        borderRadius: BorderRadius.circular(drawerIsOpen ? 70.0 : 0.0),
         color: Colors.grey[100],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(isDrawerOpen ? 70.0 : 0.0),
+        borderRadius: BorderRadius.circular(drawerIsOpen ? 70.0 : 0.0),
         child: SafeArea(
           child: SingleChildScrollView(
-            child: fetchView(),
+            child: fetchView(openDrawer, closeDrawer, isDrawerOpen),
           ),
         ),
       ),
     );
   }
 
-  Widget fetchView() {
+  Widget fetchView(
+    Function openDrawer,
+    Function closeDrawer,
+    Function isDrawerOpen,
+  ) {
     final User user = widget.user;
-    final int selectedMenuIndex = widget.getter() as int;
-    if (selectedMenuIndex == 0) {
-      return Column(
-        children: [
-          const SizedBox(height: 20.0),
-          TopNavBar(
-            openDrawer: openDrawer,
-            locationLoaded: locationLoaded,
-            country: country,
-            setCountry: setCountry,
-            isDrawerOpen: isDrawerOpen,
-            user: user,
-            isLocationSet: isLocationSet,
-            city: city,
-            closeDrawer: closeDrawer,
-            setCity: setCity,
-            setLocationLoaded: setLocationLoaded,
-          ),
-          const SizedBox(height: 20.0),
-          if (!petsLoaded)
-            FutureBuilder(
-                future: fetchPets(),
-                builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-                  if (snapshot.hasError) {
-                    return ErrorWidget(snapshot.hasError);
-                  }
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return createPetsFeed(user: user);
-                  }
-                  return Shimmer.fromColors(
-                    baseColor: Colors.grey.shade300,
-                    highlightColor: Colors.grey.shade100,
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 150.0,
-                            height: 15.0,
-                            color: Colors.white,
-                          ),
-                        ]),
-                  );
-                })
-          else
-            createPetsFeed(user: user),
-        ],
-      );
-    } else {
-      return Column(
-        children: [
-          const SizedBox(height: 20.0),
-          TopNavBar(
-            openDrawer: openDrawer,
-            locationLoaded: locationLoaded,
-            country: country,
-            setCountry: setCountry,
-            isDrawerOpen: isDrawerOpen,
-            user: user,
-            isLocationSet: isLocationSet,
-            city: city,
-            closeDrawer: closeDrawer,
-            setCity: setCity,
-            setLocationLoaded: setLocationLoaded,
-          ),
-          const SizedBox(height: 20.0),
-        ],
-      );
+    final int selectedMenuIndex = widget.getView() as int;
+    switch (selectedMenuIndex) {
+      case 0:
+        return getAdoptionScreen(user, openDrawer, closeDrawer, isDrawerOpen);
+      case 1:
+        return getDonationScreen(user, openDrawer, closeDrawer, isDrawerOpen);
+      case 2:
+        return getAddPetScreen(user, openDrawer, closeDrawer, isDrawerOpen);
+      case 3:
+        return getFavoritesScreen(user, openDrawer, closeDrawer, isDrawerOpen);
+      case 4:
+        return getMessagesScreen(user, openDrawer, closeDrawer, isDrawerOpen);
+      case 5:
+        return getProfileScreen(user, openDrawer, closeDrawer, isDrawerOpen);
+      default:
+        return Container();
     }
   }
 
-  PetsFeed createPetsFeed({required User user}) {
+  List<Widget> getTopBar(
+    User user,
+    Function openDrawer,
+    Function closeDrawer,
+    Function isDrawerOpen,
+  ) {
+    return [
+      const SizedBox(height: 20.0),
+      TopNavBar(
+        openDrawer: openDrawer,
+        locationLoaded: locationLoaded,
+        country: country,
+        setCountry: setCountry,
+        isDrawerOpen: isDrawerOpen() as bool,
+        user: user,
+        isLocationSet: isLocationSet,
+        city: city,
+        closeDrawer: closeDrawer,
+        setCity: setCity,
+        setLocationLoaded: setLocationLoaded,
+      ),
+      const SizedBox(height: 20.0)
+    ];
+  }
+
+  Column getAdoptionScreen(
+    User user,
+    Function openDrawer,
+    Function closeDrawer,
+    Function isDrawerOpen,
+  ) {
+    return Column(
+      children: [
+        ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
+        if (!petsLoaded)
+          FutureBuilder(
+              future: fetchPets(),
+              builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                if (snapshot.hasError) {
+                  return ErrorWidget(snapshot.hasError);
+                }
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return createPetsFeed(
+                    user: user,
+                    openDrawer: openDrawer,
+                    closeDrawer: closeDrawer,
+                    isDrawerOpen: isDrawerOpen,
+                  );
+                }
+                return Shimmer.fromColors(
+                  baseColor: Colors.grey.shade300,
+                  highlightColor: Colors.grey.shade100,
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 150.0,
+                          height: 15.0,
+                          color: Colors.white,
+                        ),
+                      ]),
+                );
+              })
+        else
+          createPetsFeed(
+            user: user,
+            openDrawer: openDrawer,
+            closeDrawer: closeDrawer,
+            isDrawerOpen: isDrawerOpen,
+          ),
+      ],
+    );
+  }
+
+  PetsFeed createPetsFeed(
+      {required User user,
+      required Function openDrawer,
+      required Function closeDrawer,
+      required Function isDrawerOpen}) {
     return PetsFeed(
       openDrawer: openDrawer,
       locationLoaded: locationLoaded,
       country: country,
       setCountry: setCountry,
-      isDrawerOpen: isDrawerOpen,
+      isDrawerOpen: isDrawerOpen() as bool,
       user: user,
       isLocationSet: isLocationSet,
       city: city,
@@ -239,6 +266,71 @@ class _HomeScreenState extends State<HomeScreen> {
       openPet: openPet,
       toggleFilter: toggleFilter,
       pets: filteredPets,
+    );
+  }
+
+  Column getDonationScreen(
+    User user,
+    Function openDrawer,
+    Function closeDrawer,
+    Function isDrawerOpen,
+  ) {
+    return Column(
+      children: [
+        ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
+      ],
+    );
+  }
+
+  Column getAddPetScreen(
+    User user,
+    Function openDrawer,
+    Function closeDrawer,
+    Function isDrawerOpen,
+  ) {
+    return Column(
+      children: [
+        ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
+      ],
+    );
+  }
+
+  Column getFavoritesScreen(
+    User user,
+    Function openDrawer,
+    Function closeDrawer,
+    Function isDrawerOpen,
+  ) {
+    return Column(
+      children: [
+        ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
+      ],
+    );
+  }
+
+  Column getMessagesScreen(
+    User user,
+    Function openDrawer,
+    Function closeDrawer,
+    Function isDrawerOpen,
+  ) {
+    return Column(
+      children: [
+        ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
+      ],
+    );
+  }
+
+  Column getProfileScreen(
+    User user,
+    Function openDrawer,
+    Function closeDrawer,
+    Function isDrawerOpen,
+  ) {
+    return Column(
+      children: [
+        ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
+      ],
     );
   }
 }
