@@ -8,6 +8,7 @@ import 'package:pet_adoption/screens/homeScreen/home_screen.dart';
 import 'package:pet_adoption/models/user.dart';
 import 'package:pet_adoption/screens/loginScreen/login_screen.dart';
 import 'package:pet_adoption/services/authentication.dart';
+import 'package:pet_adoption/services/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -75,6 +76,10 @@ class _HomeState extends State<Home> {
   double scaleFactor = 1;
   bool isDrawerOpen = false;
 
+  Future<User> getUserDetails(User user) async {
+    return CloudFirestore().fetchUserDetails(user.uid);
+  }
+
   void setView(int index) {
     setState(() {
       selectedView = index;
@@ -122,29 +127,35 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-
-    return Scaffold(
-      body: Stack(
-        children: [
-          DrawerScreen(
-              user: user,
-              setView: setView,
-              getView: getView,
-              openDrawer: openDrawer,
-              closeDrawer: closeDrawer),
-          HomeScreen(
-            user: user,
-            setView: setView,
-            getView: getView,
-            openDrawer: openDrawer,
-            closeDrawer: closeDrawer,
-            isDrawerOpen: getDrawerStatus,
-            getScaleFactor: getScaleFactor,
-            getOffsetY: getOffsetY,
-            getOffsetX: getOffsetX,
-          ),
-        ],
-      ),
-    );
+    return FutureBuilder<User>(
+        future: getUserDetails(user),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Scaffold(
+              body: Stack(
+                children: [
+                  DrawerScreen(
+                      user: snapshot.data,
+                      setView: setView,
+                      getView: getView,
+                      openDrawer: openDrawer,
+                      closeDrawer: closeDrawer),
+                  HomeScreen(
+                    user: snapshot.data,
+                    setView: setView,
+                    getView: getView,
+                    openDrawer: openDrawer,
+                    closeDrawer: closeDrawer,
+                    isDrawerOpen: getDrawerStatus,
+                    getScaleFactor: getScaleFactor,
+                    getOffsetY: getOffsetY,
+                    getOffsetX: getOffsetX,
+                  ),
+                ],
+              ),
+            );
+          }
+          return const CircularProgressIndicator();
+        });
   }
 }

@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_adoption/models/pet.dart';
 import 'package:pet_adoption/models/user.dart';
-import 'package:pet_adoption/screens/homeScreen/components/adoption_screen/pets_feed.dart';
+import 'package:pet_adoption/screens/homeScreen/components/adoption_screen/adoption_feed.dart';
+import 'package:pet_adoption/screens/homeScreen/components/favorites_screen/favorites_feed.dart';
 import 'package:pet_adoption/screens/homeScreen/components/top/top_nav_bar.dart';
 import 'package:pet_adoption/screens/petScreen/pet_screen.dart';
 import 'package:pet_adoption/services/cloud_firestore.dart';
@@ -49,9 +50,14 @@ class _HomeScreenState extends State<HomeScreen> {
   late String city = "";
   late String country = "";
 
-  void openPet(Pet pet) {
+  void openPet(Pet pet, User user) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => PetScreen(pet: pet)));
+        context,
+        MaterialPageRoute(
+            builder: (context) => PetScreen(
+                  pet: pet,
+                  user: user,
+                )));
   }
 
   bool isLocationSet() {
@@ -211,11 +217,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   return ErrorWidget(snapshot.hasError);
                 }
                 if (snapshot.connectionState == ConnectionState.done) {
-                  return createPetsFeed(
-                    user: user,
+                  return AdoptionFeed(
                     openDrawer: openDrawer,
+                    locationLoaded: locationLoaded,
+                    country: country,
+                    setCountry: setCountry,
+                    isDrawerOpen: isDrawerOpen() as bool,
+                    user: user,
+                    isLocationSet: isLocationSet,
+                    city: city,
                     closeDrawer: closeDrawer,
-                    isDrawerOpen: isDrawerOpen,
+                    setCity: setCity,
+                    setLocationLoaded: setLocationLoaded,
+                    editFilters: editFilters,
+                    selectedIndex: selectedFilterIndexes,
+                    isFilterOpen: isFilterOpen,
+                    openPet: openPet,
+                    toggleFilter: toggleFilter,
+                    pets: filteredPets,
                   );
                 }
                 return Shimmer.fromColors(
@@ -233,39 +252,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               })
         else
-          createPetsFeed(
-            user: user,
+          AdoptionFeed(
             openDrawer: openDrawer,
+            locationLoaded: locationLoaded,
+            country: country,
+            setCountry: setCountry,
+            isDrawerOpen: isDrawerOpen() as bool,
+            user: user,
+            isLocationSet: isLocationSet,
+            city: city,
             closeDrawer: closeDrawer,
-            isDrawerOpen: isDrawerOpen,
+            setCity: setCity,
+            setLocationLoaded: setLocationLoaded,
+            editFilters: editFilters,
+            selectedIndex: selectedFilterIndexes,
+            isFilterOpen: isFilterOpen,
+            openPet: openPet,
+            toggleFilter: toggleFilter,
+            pets: filteredPets,
           ),
       ],
-    );
-  }
-
-  PetsFeed createPetsFeed(
-      {required User user,
-      required Function openDrawer,
-      required Function closeDrawer,
-      required Function isDrawerOpen}) {
-    return PetsFeed(
-      openDrawer: openDrawer,
-      locationLoaded: locationLoaded,
-      country: country,
-      setCountry: setCountry,
-      isDrawerOpen: isDrawerOpen() as bool,
-      user: user,
-      isLocationSet: isLocationSet,
-      city: city,
-      closeDrawer: closeDrawer,
-      setCity: setCity,
-      setLocationLoaded: setLocationLoaded,
-      editFilters: editFilters,
-      selectedIndex: selectedFilterIndexes,
-      isFilterOpen: isFilterOpen,
-      openPet: openPet,
-      toggleFilter: toggleFilter,
-      pets: filteredPets,
     );
   }
 
@@ -304,6 +310,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       children: [
         ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
+        FavoritesFeed(openPet: openPet, user: user),
       ],
     );
   }

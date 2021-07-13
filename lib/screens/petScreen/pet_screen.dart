@@ -1,14 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_adoption/models/pet.dart';
+import 'package:pet_adoption/models/user.dart';
 import 'package:pet_adoption/screens/petScreen/components/bottom_buttons.dart';
 import 'package:pet_adoption/screens/petScreen/components/owner_description.dart';
 import 'package:pet_adoption/screens/petScreen/components/pet_details.dart';
 
 class PetScreen extends StatelessWidget {
   final Pet pet;
+  final User user;
 
-  const PetScreen({Key? key, required this.pet}) : super(key: key);
+  const PetScreen({Key? key, required this.pet, required this.user})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +77,7 @@ class PetScreen extends StatelessWidget {
                     topRight: Radius.circular(50.0),
                   ),
                 ),
-                child: const BottomButtons(),
+                child: BottomButtons(user: user, pet: pet),
               ),
             ),
             Align(

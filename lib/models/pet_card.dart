@@ -2,19 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pet_adoption/configurations.dart';
 import 'package:pet_adoption/models/pet.dart';
+import 'package:pet_adoption/models/user.dart';
 
 class PetCard extends StatelessWidget {
   final Function openPet;
   final Pet pet;
+  final User user;
 
-  const PetCard({Key? key, required this.openPet, required this.pet})
+  const PetCard(
+      {Key? key, required this.openPet, required this.pet, required this.user})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        openPet(pet);
+        openPet(pet, user);
       },
       child: Container(
         height: 270,

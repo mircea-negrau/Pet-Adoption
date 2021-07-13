@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pet_adoption/configurations.dart';
+import 'package:pet_adoption/models/pet.dart';
+import 'package:pet_adoption/models/user.dart';
 
 class BottomButtons extends StatelessWidget {
-  const BottomButtons({Key? key}) : super(key: key);
+  final User user;
+  final Pet pet;
+
+  const BottomButtons({Key? key, required this.user, required this.pet}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +28,9 @@ class BottomButtons extends StatelessWidget {
               )
             ],
           ),
-          child: const Icon(
+          child: Icon(
             Icons.favorite_border,
-            color: Colors.white,
+            color: user.favorites!.contains(pet.id) ? Colors.red : Colors.white,
           ),
         ),
         const SizedBox(width: 20.0),
