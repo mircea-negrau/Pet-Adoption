@@ -34,7 +34,7 @@ class PetCard extends StatelessWidget {
                   Align(
                     child: Hero(
                       tag: pet.id,
-                      child: Image.asset(pet.picture),
+                      child: Image.network(pet.picture),
                     ),
                   ),
                 ],
@@ -128,7 +128,7 @@ class PetCard extends StatelessWidget {
                         children: [
                           Flexible(
                             child: Text(
-                              "Distance: ${pet.distance}",
+                              "Distance: TBA",
                               style: TextStyle(
                                 fontSize: 15.0,
                                 fontWeight: FontWeight.bold,
@@ -140,7 +140,7 @@ class PetCard extends StatelessWidget {
                             tag: "LOCATION${pet.id}",
                             child: Icon(
                               Icons.location_on_rounded,
-                              color: primaryGreen,
+                              color: primaryYellow,
                             ),
                           ),
                         ],

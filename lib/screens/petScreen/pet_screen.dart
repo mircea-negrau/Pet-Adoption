@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pet_adoption/configurations.dart';
 import 'package:pet_adoption/models/pet.dart';
 import 'package:pet_adoption/screens/petScreen/components/bottom_buttons.dart';
 import 'package:pet_adoption/screens/petScreen/components/owner_description.dart';
@@ -39,7 +38,7 @@ class PetScreen extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 450.0),
                 child: Hero(
                   tag: pet.id,
-                  child: Image.asset(pet.picture),
+                  child: Image.network(pet.picture),
                 ),
               ),
             ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pet_adoption/configurations.dart';
+import 'package:pet_adoption/models/pet.dart';
 import 'package:pet_adoption/models/user.dart';
 import 'package:pet_adoption/screens/homeScreen/components/filter_bar.dart';
 import 'package:pet_adoption/screens/homeScreen/components/pet_card.dart';
@@ -22,6 +22,7 @@ class PetsFeed extends StatelessWidget {
   final User user;
   final String city;
   final String country;
+  final List<Pet> pets;
 
   const PetsFeed({
     Key? key,
@@ -41,10 +42,11 @@ class PetsFeed extends StatelessWidget {
     required this.user,
     required this.city,
     required this.country,
+    required this.pets,
   }) : super(key: key);
 
   List<Widget> getPetCards() {
-    return petsList
+    return pets
         .map((pet) => PetCard(
               pet: pet,
               openPet: openPet,

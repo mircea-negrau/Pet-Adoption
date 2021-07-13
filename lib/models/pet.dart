@@ -4,7 +4,6 @@ class Pet {
   String gender;
   String type;
   String breed;
-  String distance;
   String picture;
   String age;
   String location;
@@ -15,7 +14,6 @@ class Pet {
     required this.gender,
     required this.type,
     required this.breed,
-    required this.distance,
     required this.picture,
     required this.age,
     required this.location,

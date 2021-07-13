@@ -20,6 +20,7 @@ class FilterBar extends StatelessWidget {
         height: 100,
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
+
             itemCount: categories.length,
             itemBuilder: (context, index) {
               return GestureDetector(
@@ -30,7 +31,7 @@ class FilterBar extends StatelessWidget {
                   children: [
                     Container(
                       padding: const EdgeInsets.all(10),
-                      margin: const EdgeInsets.only(left: 20),
+                      margin: const EdgeInsets.only(left: 30),
                       decoration: BoxDecoration(
                         color: selectedIndex.contains(index)
                             ? primaryYellow
