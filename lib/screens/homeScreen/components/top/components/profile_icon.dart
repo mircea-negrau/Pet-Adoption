@@ -25,8 +25,8 @@ class ProfileIcon extends StatelessWidget {
               const Icon(Icons.exit_to_app_rounded),
               const SizedBox(width: 10.0),
               GestureDetector(
-                onTap: () {
-                  AuthenticationService().signOut();
+                onTap: () async {
+                  await AuthenticationService().signOut();
                 },
                 child: const Text('Logout'),
               ),

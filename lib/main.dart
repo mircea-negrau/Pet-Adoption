@@ -58,7 +58,7 @@ class Setup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
+    final user =  Provider.of<User>(context);
     if (user == null) return const Login();
     return Home();
   }
@@ -77,7 +77,13 @@ class _HomeState extends State<Home> {
   bool isDrawerOpen = false;
 
   Future<User> getUserDetails(User user) async {
-    return CloudFirestore().fetchUserDetails(user.uid);
+    await Future.delayed(const Duration(seconds: 2));
+    final answer = await CloudFirestore().fetchUserDetails(user.email);
+    if (answer == null) {
+      return User(id: "-1", email: "-1");
+    } else {
+      return answer;
+    }
   }
 
   void setView(int index) {
@@ -131,29 +137,34 @@ class _HomeState extends State<Home> {
         future: getUserDetails(user),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Scaffold(
-              body: Stack(
-                children: [
-                  DrawerScreen(
+            if (snapshot.data.email == "-1") {
+              AuthenticationService().signOut();
+              return const Setup();
+            } else {
+              return Scaffold(
+                body: Stack(
+                  children: [
+                    DrawerScreen(
+                        user: snapshot.data,
+                        setView: setView,
+                        getView: getView,
+                        openDrawer: openDrawer,
+                        closeDrawer: closeDrawer),
+                    HomeScreen(
                       user: snapshot.data,
                       setView: setView,
                       getView: getView,
                       openDrawer: openDrawer,
-                      closeDrawer: closeDrawer),
-                  HomeScreen(
-                    user: snapshot.data,
-                    setView: setView,
-                    getView: getView,
-                    openDrawer: openDrawer,
-                    closeDrawer: closeDrawer,
-                    isDrawerOpen: getDrawerStatus,
-                    getScaleFactor: getScaleFactor,
-                    getOffsetY: getOffsetY,
-                    getOffsetX: getOffsetX,
-                  ),
-                ],
-              ),
-            );
+                      closeDrawer: closeDrawer,
+                      isDrawerOpen: getDrawerStatus,
+                      getScaleFactor: getScaleFactor,
+                      getOffsetY: getOffsetY,
+                      getOffsetX: getOffsetX,
+                    ),
+                  ],
+                ),
+              );
+            }
           }
           return const CircularProgressIndicator();
         });

@@ -57,7 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (context) => PetScreen(
                   pet: pet,
                   user: user,
-                )));
+                ))).then((context) {
+      setState(() {});
+    });
   }
 
   bool isLocationSet() {

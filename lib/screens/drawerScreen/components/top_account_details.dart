@@ -14,7 +14,7 @@ class TopAccountDetails extends StatelessWidget {
       const SizedBox(width: 20.0),
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(
-          user.name == null ? "John Smith" : user.name.toString(),
+          user.userName == null ? "John Smith" : user.userName.toString(),
           style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,

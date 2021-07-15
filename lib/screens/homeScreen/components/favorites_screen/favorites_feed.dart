@@ -31,7 +31,7 @@ class _FavoritesFeedState extends State<FavoritesFeed> {
   }
 
   Future<List<Pet>> getFavorites() async {
-    final String uid = widget.user.uid;
+    final String uid = widget.user.id;
     return CloudFirestore().fetchFavorites(uid);
   }
 

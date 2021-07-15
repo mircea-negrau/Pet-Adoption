@@ -1,13 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:pet_adoption/models/user.dart';
 import 'package:google_sign_in/google_sign_in.dart' as g_auth;
+import 'package:pet_adoption/services/cloud_firestore.dart';
 
 class AuthenticationService {
   final auth.FirebaseAuth _auth = auth.FirebaseAuth.instance;
 
   User? _userFromFirebaseUser(auth.User? user) {
     if (user == null) return null;
-    return User(uid: user.uid, name: user.displayName, photoUrl: user.photoURL);
+    return User(
+        id: user.uid,
+        email: user.email,
+        userName: user.displayName,
+        photoUrl: user.photoURL);
   }
 
   Stream<User?> get user {
@@ -32,20 +37,30 @@ class AuthenticationService {
     await g_auth.GoogleSignIn().signOut();
   }
 
-  Future<auth.UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
+  Future<bool> checkIfNewGoogleAccount(
+      auth.UserCredential userCredential) async {
+    if (await CloudFirestore().isUserNew(userCredential.user.email)) {
+      return CloudFirestore().createNewGoogleUser(userCredential);
+    }
+    return false;
+  }
+
+  Future<auth.UserCredential?> signInWithGoogle() async {
     final g_auth.GoogleSignInAccount googleUser =
         await g_auth.GoogleSignIn().signIn();
 
-    // Obtain the auth details from the request
     final g_auth.GoogleSignInAuthentication googleAuth =
         await googleUser.authentication!;
 
-    // Create a new credential
     final credential = auth.GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-    return auth.FirebaseAuth.instance.signInWithCredential(credential);
+
+    final userCredential =
+        await auth.FirebaseAuth.instance.signInWithCredential(credential);
+
+    await checkIfNewGoogleAccount(userCredential);
+    return userCredential;
   }
 }

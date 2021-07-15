@@ -1,8 +1,33 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:pet_adoption/models/pet.dart';
 import 'package:pet_adoption/models/user.dart';
 
 class CloudFirestore {
+  Future<bool> removeUserFavorites(User user, Pet pet) async {
+    final collection = FirebaseFirestore.instance.collection('users');
+    final List<String> favorites = [];
+    favorites.addAll(user.favorites!);
+    favorites.remove(pet.id);
+
+    await collection.doc(user.id).update(<String, dynamic>{
+      "favorites": favorites,
+    });
+    return true;
+  }
+
+  Future<bool> addUserFavorites(User user, Pet pet) async {
+    final collection = FirebaseFirestore.instance.collection('users');
+    final List<String> favorites = [];
+    favorites.addAll(user.favorites!);
+    favorites.add(pet.id);
+
+    await collection.doc(user.id).update(<String, dynamic>{
+      "favorites": favorites,
+    });
+    return true;
+  }
+
   Future<List<Pet>> fetchPets() async {
     final List<Pet> pets = [];
     await FirebaseFirestore.instance
@@ -75,18 +100,26 @@ class CloudFirestore {
     );
   }
 
-  Future<User> fetchUserDetails(String uid) async {
+  Future<User> fetchUserDetails(String userEmail) async {
     var user;
     await FirebaseFirestore.instance
         .collection("users")
-        .where("id", isEqualTo: uid)
+        .where("email", isEqualTo: userEmail)
         .get()
         .then((QuerySnapshot querySnapshot) {
-      user = querySnapshot.docs.first;
+      if (querySnapshot.docs.isNotEmpty) user = querySnapshot.docs.first;
     });
 
+    if (user == null) {
+      return User(id: "-1", email: "-1");
+    }
+
+    final String id = user["id"].toString();
+    final String email = user["email"].toString();
     final String photoUrl = user["photoUrl"].toString();
-    final String name = user["userName"].toString();
+    final String userName = user["userName"].toString();
+    final String firstName = user["firstName"].toString();
+    final String lastName = user["lastName"].toString();
     final favoritesList = user["favorites"] as List;
     final List<String> favorites = [];
     for (final item in favoritesList) {
@@ -94,26 +127,65 @@ class CloudFirestore {
     }
 
     return User(
-      uid: uid,
+      id: id,
+      email: email,
+      userName: userName,
+      firstName: firstName,
+      lastName: lastName,
       photoUrl: photoUrl,
-      name: name,
       favorites: favorites,
     );
   }
 
-  Future<User> fetchUser(String uid) async {
+  Future<bool> isUserNew(String email) async {
     var user;
     await FirebaseFirestore.instance
         .collection("users")
-        .where("id", isEqualTo: uid)
+        .where("email", isEqualTo: email)
         .get()
         .then((QuerySnapshot querySnapshot) {
-      user = querySnapshot.docs.first;
+      if (querySnapshot.docs.isNotEmpty) user = querySnapshot.docs.first;
     });
+    if (user == null) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> createNewGoogleUser(auth.UserCredential userCredential) async {
+    final newDocument = FirebaseFirestore.instance.collection("users").doc();
+    final String documentID = newDocument.id;
+    await FirebaseFirestore.instance.collection("users").doc(documentID).set({
+      "id": documentID,
+      "email": userCredential.user.email,
+      "userName": userCredential.user.displayName,
+      "firstName": userCredential.additionalUserInfo.profile["given_name"],
+      "lastName": userCredential.additionalUserInfo.profile["family_name"],
+      "photoUrl": userCredential.additionalUserInfo.profile["picture"],
+      "favorites": [],
+    });
+    return true;
+  }
+
+  Future<User> fetchUser(String id) async {
+    var user;
+    await FirebaseFirestore.instance
+        .collection("users")
+        .where("id", isEqualTo: id)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) user = querySnapshot.docs.first;
+    });
+
+    if (user == null) {
+      return User(id: "-1", email: "-1");
+    }
+
     return User(
-        uid: uid,
+        id: user["id"].toString(),
+        email: user["email"].toString(),
         photoUrl: user["photoUrl"].toString(),
-        name: user["userName"].toString());
+        userName: user["userName"].toString());
   }
 
   Future<List<Pet>> fetchFavorites(String uid) async {

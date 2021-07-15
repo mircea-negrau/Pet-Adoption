@@ -22,12 +22,10 @@ class ThirdPartyLogin extends StatelessWidget {
         ),
         const SizedBox(width: 20.0),
         ElevatedButton(
-          onPressed: () {
-            try {
-              AuthenticationService().signInWithGoogle();
-            } catch (e) {
-              print(e);
-            }
+          onPressed: () async {
+            print("STARTED");
+            await AuthenticationService().signInWithGoogle();
+            print("ENDED");
           },
           child: Row(
             children: const [

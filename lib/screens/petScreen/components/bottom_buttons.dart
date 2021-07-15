@@ -1,14 +1,22 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_adoption/configurations.dart';
 import 'package:pet_adoption/models/pet.dart';
 import 'package:pet_adoption/models/user.dart';
+import 'package:pet_adoption/services/cloud_firestore.dart';
 
-class BottomButtons extends StatelessWidget {
+class BottomButtons extends StatefulWidget {
   final User user;
   final Pet pet;
 
-  const BottomButtons({Key? key, required this.user, required this.pet}) : super(key: key);
+  const BottomButtons({Key? key, required this.user, required this.pet})
+      : super(key: key);
 
+  @override
+  _BottomButtonsState createState() => _BottomButtonsState();
+}
+
+class _BottomButtonsState extends State<BottomButtons> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -28,9 +36,28 @@ class BottomButtons extends StatelessWidget {
               )
             ],
           ),
-          child: Icon(
-            Icons.favorite_border,
-            color: user.favorites!.contains(pet.id) ? Colors.red : Colors.white,
+          child: IconButton(
+            icon: Icon(
+              widget.user.favorites!.contains(widget.pet.id)
+                  ? Icons.favorite
+                  : Icons.favorite_border_outlined,
+              color: widget.user.favorites!.contains(widget.pet.id)
+                  ? Colors.red
+                  : Colors.white,
+            ),
+            onPressed: () async {
+              if (widget.user.favorites!.contains(widget.pet.id)) {
+                await CloudFirestore()
+                    .removeUserFavorites(widget.user, widget.pet);
+                widget.user.favorites!.remove(widget.pet.id);
+                setState(() {});
+              } else {
+                await CloudFirestore()
+                    .addUserFavorites(widget.user, widget.pet);
+                widget.user.favorites!.insert(0, widget.pet.id);
+                setState(() {});
+              }
+            },
           ),
         ),
         const SizedBox(width: 20.0),
