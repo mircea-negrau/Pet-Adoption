@@ -142,6 +142,7 @@ class _HomeState extends State<Home> {
               return const Setup();
             } else {
               return Scaffold(
+                resizeToAvoidBottomInset: false,
                 body: Stack(
                   children: [
                     DrawerScreen(

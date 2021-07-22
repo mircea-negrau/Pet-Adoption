@@ -23,6 +23,8 @@ dependencies:
   geolocator: any
   geocoder: any
   shimmer: any
+  image_picker: any
+  auto_size_text_field: ^0.1.7
 
 
 dev_dependencies:

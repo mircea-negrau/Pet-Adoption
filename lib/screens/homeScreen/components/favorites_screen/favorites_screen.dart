@@ -20,7 +20,7 @@ class FavoritesFeed extends StatefulWidget {
 
 class _FavoritesFeedState extends State<FavoritesFeed> {
   List<Widget> getPetCards(List<Pet>? pets) {
-    if(pets == null) return [Text("Empty")];
+    if(pets == null) return [const Text("Empty")];
     return pets
         .map((pet) => PetCard(
               pet: pet,

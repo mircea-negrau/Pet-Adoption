@@ -6,7 +6,8 @@ class GeolocationService {
       {required Function isLocationSet,
       required Function setCity,
       required Function setCountry,
-      required Function setLocationLoaded}) async {
+      required Function setLocationLoaded,
+      required Function setAddress}) async {
     if (isLocationSet() == true) {
       return;
     }
@@ -16,12 +17,14 @@ class GeolocationService {
     final addresses =
         await Geocoder.local.findAddressesFromCoordinates(coordinates);
     final first = addresses.first;
+    final String address = "${first.locality}, ${first.countryName}";
     setCity(first.locality);
     setCountry(first.countryName);
+    setAddress(address);
     setLocationLoaded();
   }
 
-  Future<void> getLocationName (double latitude, double longitude) async {
+  Future<void> getLocationName(double latitude, double longitude) async {
     final coordinates = Coordinates(latitude, longitude);
     final addresses =
         await Geocoder.local.findAddressesFromCoordinates(coordinates);

@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pet_adoption/configurations.dart';
 import 'package:pet_adoption/models/pet.dart';
 import 'package:pet_adoption/models/user.dart';
+import 'package:pet_adoption/screens/homeScreen/components/add_pet_screen/add_pet_screen.dart';
 import 'package:pet_adoption/screens/homeScreen/components/adoption_screen/adoption_feed.dart';
-import 'package:pet_adoption/screens/homeScreen/components/favorites_screen/favorites_feed.dart';
+import 'package:pet_adoption/screens/homeScreen/components/favorites_screen/favorites_screen.dart';
 import 'package:pet_adoption/screens/homeScreen/components/top/top_nav_bar.dart';
 import 'package:pet_adoption/screens/petScreen/pet_screen.dart';
 import 'package:pet_adoption/services/cloud_firestore.dart';
@@ -49,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late String city = "";
   late String country = "";
+  late String address = "";
 
   void openPet(Pet pet, User user) {
     Navigator.push(
@@ -81,6 +85,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void setLocationLoaded() {
     setState(() {
       locationLoaded = true;
+    });
+  }
+
+  void setAddress(String _address) {
+    setState(() {
+      address = _address;
     });
   }
 
@@ -136,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
       constraints: const BoxConstraints.expand(),
       transform: Matrix4.translationValues(xOffset, yOffset, 0)
         ..scale(scaleFactor),
-      duration: const Duration(milliseconds: 250),
+      duration: const Duration(milliseconds: 150),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(drawerIsOpen ? 70.0 : 0.0),
         color: Colors.grey[100],
@@ -144,9 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(drawerIsOpen ? 70.0 : 0.0),
         child: SafeArea(
-          child: SingleChildScrollView(
-            child: fetchView(openDrawer, closeDrawer, isDrawerOpen),
-          ),
+          child: fetchView(openDrawer, closeDrawer, isDrawerOpen),
         ),
       ),
     );
@@ -165,7 +173,13 @@ class _HomeScreenState extends State<HomeScreen> {
       case 1:
         return getDonationScreen(user, openDrawer, closeDrawer, isDrawerOpen);
       case 2:
-        return getAddPetScreen(user, openDrawer, closeDrawer, isDrawerOpen);
+        return AddPetScreen(
+          user: user,
+          openDrawer: openDrawer,
+          closeDrawer: closeDrawer,
+          isDrawerOpen: isDrawerOpen,
+          address: address,
+        );
       case 3:
         return getFavoritesScreen(user, openDrawer, closeDrawer, isDrawerOpen);
       case 4:
@@ -196,150 +210,152 @@ class _HomeScreenState extends State<HomeScreen> {
         city: city,
         closeDrawer: closeDrawer,
         setCity: setCity,
+        setAddress: setAddress,
         setLocationLoaded: setLocationLoaded,
       ),
       const SizedBox(height: 20.0)
     ];
   }
 
-  Column getAdoptionScreen(
+  Widget getAdoptionScreen(
     User user,
     Function openDrawer,
     Function closeDrawer,
     Function isDrawerOpen,
   ) {
-    return Column(
-      children: [
-        ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
-        if (!petsLoaded)
-          FutureBuilder(
-              future: fetchPets(),
-              builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-                if (snapshot.hasError) {
-                  return ErrorWidget(snapshot.hasError);
-                }
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return AdoptionFeed(
-                    openDrawer: openDrawer,
-                    locationLoaded: locationLoaded,
-                    country: country,
-                    setCountry: setCountry,
-                    isDrawerOpen: isDrawerOpen() as bool,
-                    user: user,
-                    isLocationSet: isLocationSet,
-                    city: city,
-                    closeDrawer: closeDrawer,
-                    setCity: setCity,
-                    setLocationLoaded: setLocationLoaded,
-                    editFilters: editFilters,
-                    selectedIndex: selectedFilterIndexes,
-                    isFilterOpen: isFilterOpen,
-                    openPet: openPet,
-                    toggleFilter: toggleFilter,
-                    pets: filteredPets,
-                  );
-                }
-                return Shimmer.fromColors(
-                  baseColor: Colors.grey.shade300,
-                  highlightColor: Colors.grey.shade100,
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 150.0,
-                          height: 15.0,
-                          color: Colors.white,
-                        ),
-                      ]),
-                );
-              })
-        else
-          AdoptionFeed(
-            openDrawer: openDrawer,
-            locationLoaded: locationLoaded,
-            country: country,
-            setCountry: setCountry,
-            isDrawerOpen: isDrawerOpen() as bool,
-            user: user,
-            isLocationSet: isLocationSet,
-            city: city,
-            closeDrawer: closeDrawer,
-            setCity: setCity,
-            setLocationLoaded: setLocationLoaded,
-            editFilters: editFilters,
-            selectedIndex: selectedFilterIndexes,
-            isFilterOpen: isFilterOpen,
-            openPet: openPet,
-            toggleFilter: toggleFilter,
-            pets: filteredPets,
-          ),
-      ],
+    return RefreshIndicator(
+      onRefresh: () async { await fetchPets(); },
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Column(
+          children: [
+            ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
+            if (!petsLoaded)
+              FutureBuilder(
+                  future: fetchPets(),
+                  builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                    if (snapshot.hasError) {
+                      return ErrorWidget(snapshot.hasError);
+                    }
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return AdoptionFeed(
+                        openDrawer: openDrawer,
+                        locationLoaded: locationLoaded,
+                        country: country,
+                        setCountry: setCountry,
+                        isDrawerOpen: isDrawerOpen() as bool,
+                        user: user,
+                        isLocationSet: isLocationSet,
+                        city: city,
+                        closeDrawer: closeDrawer,
+                        setCity: setCity,
+                        setLocationLoaded: setLocationLoaded,
+                        editFilters: editFilters,
+                        selectedIndex: selectedFilterIndexes,
+                        isFilterOpen: isFilterOpen,
+                        openPet: openPet,
+                        toggleFilter: toggleFilter,
+                        pets: filteredPets,
+                      );
+                    }
+                    return Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey.shade100,
+                      child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 150.0,
+                              height: 15.0,
+                              color: Colors.white,
+                            ),
+                          ]),
+                    );
+                  })
+            else
+              AdoptionFeed(
+                openDrawer: openDrawer,
+                locationLoaded: locationLoaded,
+                country: country,
+                setCountry: setCountry,
+                isDrawerOpen: isDrawerOpen() as bool,
+                user: user,
+                isLocationSet: isLocationSet,
+                city: city,
+                closeDrawer: closeDrawer,
+                setCity: setCity,
+                setLocationLoaded: setLocationLoaded,
+                editFilters: editFilters,
+                selectedIndex: selectedFilterIndexes,
+                isFilterOpen: isFilterOpen,
+                openPet: openPet,
+                toggleFilter: toggleFilter,
+                pets: filteredPets,
+              ),
+          ],
+        ),
+      ),
     );
   }
 
-  Column getDonationScreen(
+  Widget getDonationScreen(
     User user,
     Function openDrawer,
     Function closeDrawer,
     Function isDrawerOpen,
   ) {
-    return Column(
-      children: [
-        ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
+        ],
+      ),
     );
   }
 
-  Column getAddPetScreen(
+  Widget getFavoritesScreen(
     User user,
     Function openDrawer,
     Function closeDrawer,
     Function isDrawerOpen,
   ) {
-    return Column(
-      children: [
-        ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
+          FavoritesFeed(openPet: openPet, user: user),
+        ],
+      ),
     );
   }
 
-  Column getFavoritesScreen(
+  Widget getMessagesScreen(
     User user,
     Function openDrawer,
     Function closeDrawer,
     Function isDrawerOpen,
   ) {
-    return Column(
-      children: [
-        ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
-        FavoritesFeed(openPet: openPet, user: user),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
+        ],
+      ),
     );
   }
 
-  Column getMessagesScreen(
+  Widget getProfileScreen(
     User user,
     Function openDrawer,
     Function closeDrawer,
     Function isDrawerOpen,
   ) {
-    return Column(
-      children: [
-        ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
-      ],
-    );
-  }
-
-  Column getProfileScreen(
-    User user,
-    Function openDrawer,
-    Function closeDrawer,
-    Function isDrawerOpen,
-  ) {
-    return Column(
-      children: [
-        ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
+        ],
+      ),
     );
   }
 }

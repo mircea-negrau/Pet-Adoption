@@ -1,19 +1,52 @@
+import 'dart:io';
+import 'dart:math';
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pet_adoption/models/pet.dart';
 import 'package:pet_adoption/models/user.dart';
 
 class CloudFirestore {
-  Future<bool> removeUserFavorites(User user, Pet pet) async {
-    final collection = FirebaseFirestore.instance.collection('users');
-    final List<String> favorites = [];
-    favorites.addAll(user.favorites!);
-    favorites.remove(pet.id);
-
-    await collection.doc(user.id).update(<String, dynamic>{
-      "favorites": favorites,
+  Future<bool> addPet(Pet pet, File picture) async {
+    final String photoURL = await uploadFile(picture);
+    final newDocument = FirebaseFirestore.instance.collection("pets").doc();
+    final String documentID = newDocument.id;
+    await FirebaseFirestore.instance.collection("pets").doc(documentID).set({
+      "id": documentID,
+      "age": pet.age,
+      "breed": pet.breed,
+      "city": pet.location.split(", ")[0],
+      "country": pet.location.split(", ")[1],
+      "description": pet.description,
+      "gender": pet.gender,
+      "name": pet.name,
+      "owner": pet.ownerID,
+      "picture": photoURL,
+      "type": pet.type,
+      "addedDate": pet.addedDate,
     });
     return true;
+  }
+
+  Future<String> uploadFile(File file) async {
+    final random = Random.secure();
+    final values = List<int>.generate(15, (i) => random.nextInt(255));
+    final String photoID = base64UrlEncode(values);
+    late String photoURL = "";
+    try {
+      await FirebaseStorage.instance.ref('pets/$photoID').putFile(file);
+      await Future.delayed(const Duration(milliseconds: 50));
+      photoURL = await FirebaseStorage.instance
+          .ref()
+          .child('pets/$photoID')
+          .getDownloadURL();
+    } on FirebaseException catch (e) {
+      debugPrint("File upload error! $e");
+    }
+    return photoURL;
   }
 
   Future<bool> addUserFavorites(User user, Pet pet) async {
@@ -21,6 +54,18 @@ class CloudFirestore {
     final List<String> favorites = [];
     favorites.addAll(user.favorites!);
     favorites.add(pet.id);
+
+    await collection.doc(user.id).update(<String, dynamic>{
+      "favorites": favorites,
+    });
+    return true;
+  }
+
+  Future<bool> removeUserFavorites(User user, Pet pet) async {
+    final collection = FirebaseFirestore.instance.collection('users');
+    final List<String> favorites = [];
+    favorites.addAll(user.favorites!);
+    favorites.remove(pet.id);
 
     await collection.doc(user.id).update(<String, dynamic>{
       "favorites": favorites,

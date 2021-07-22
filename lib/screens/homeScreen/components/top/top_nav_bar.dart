@@ -13,24 +13,26 @@ class TopNavBar extends StatelessWidget {
   final Function setCountry;
   final Function setLocationLoaded;
   final Function isLocationSet;
+  final Function setAddress;
   final User user;
   final String city;
   final String country;
 
-  const TopNavBar(
-      {Key? key,
-      required this.isDrawerOpen,
-      required this.locationLoaded,
-      required this.openDrawer,
-      required this.closeDrawer,
-      required this.setCity,
-      required this.setCountry,
-      required this.setLocationLoaded,
-      required this.isLocationSet,
-      required this.user,
-      required this.city,
-      required this.country})
-      : super(key: key);
+  const TopNavBar({
+    Key? key,
+    required this.isDrawerOpen,
+    required this.locationLoaded,
+    required this.openDrawer,
+    required this.closeDrawer,
+    required this.setCity,
+    required this.setCountry,
+    required this.setLocationLoaded,
+    required this.isLocationSet,
+    required this.user,
+    required this.city,
+    required this.country,
+    required this.setAddress,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +52,7 @@ class TopNavBar extends StatelessWidget {
             setCity: setCity,
             setCountry: setCountry,
             setLocationLoaded: setLocationLoaded,
+            setAddress: setAddress,
             country: country,
             city: city,
           ),
