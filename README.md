@@ -6,12 +6,12 @@
 <img align="right" width="153" height="272" src="https://user-images.githubusercontent.com/74305289/127175893-2939ff86-146d-4624-9ba6-2f3fd077887d.png">
 
 ### Login
-  - [X] Connected to Firestore Authentication API
+  - [X] Firestore Authentication API
   - [X] Email login
   - [X] Google login using API
   - [ ] Facebook login 
-  - [X] Automatic login if user did not sign out
-  - [X] Automatic account creation when logging in using Google API
+  - [X] User remembered until signed out
+  - [X] Automatic account creation for Google login
   - [ ] Email sign up 
   - [ ] Forgot password 
   - [X] Animated icon 
