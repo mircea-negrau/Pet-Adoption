@@ -1,6 +1,13 @@
 # Pet Adoption
 
 ## Overview
+- [1. Login](#login) 
+- [2. Drawer](#drawer) 
+- [3. Main View](#main-view) 
+- [3.1 Adoption Page](#adoption-page) 
+- [3.2 Pet Page](#pet-page)
+- [3.3 Add Pet Page](#add-pet-page)  
+- [3.4 Favorites Page](#favorites-page)  
 
 ### Login 
 <img align="right" width="153" height="272" src="https://user-images.githubusercontent.com/74305289/127175775-35631c80-ca42-4534-9cd7-6dab00104d15.png">
@@ -59,6 +66,7 @@ https://user-images.githubusercontent.com/74305289/127184451-eaf62ebf-1f71-430f-
 - [ ] Pet Cards showing distance to current user
 - [ ] Search bar
 - [X] Pet Page opening on Pet Card tap
+- [X] Pet details are neatly transitioned to their position upon tap using Hero widgets
 - [X] Manual pets refresh by pull down
 - [X] Filter by species (default is all)
 - [X] Hide filter
@@ -81,3 +89,31 @@ https://user-images.githubusercontent.com/74305289/127186508-56a50746-defc-4c4e-
 - [ ] Adopt button 
 
 https://user-images.githubusercontent.com/74305289/127187644-9c8b016b-d245-4558-8f0a-887e9c92b27f.mp4
+
+### Add Pet Page
+
+<img align="right" width="153" height="272" src="https://user-images.githubusercontent.com/74305289/127190011-411080f9-e40c-4de6-bd54-c5623ea9981a.png">
+
+- [X] Upload image from Photo Library
+- [X] Upload image from Camera
+- [X] Name pet
+- [X] Name breed
+- [X] Select species
+- [X] Select gender
+- [X] Set age in months/years
+- [X] Add description
+- [X] User details and upload date automatically set
+- [X] Validation system (no field can be empty)
+- [X] Empty button (clear all fields)
+- [X] Publish button (add pet)
+
+https://user-images.githubusercontent.com/74305289/127190588-fd3b3153-30da-4e45-adfa-657ea1caae96.mp4
+
+### Favorites Page
+
+<img align="right" width="153" height="272" src="https://user-images.githubusercontent.com/74305289/127190756-2d589f53-aa71-4698-b93a-068c9d46ecf0.png">
+
+- [X] Manual refresh of favorites
+- [X] Pet Page opens on tap
+- [X] Only favorite pets are shown
+- [X] Pet details are neatly transitioned to their position upon tap using Hero widgets
