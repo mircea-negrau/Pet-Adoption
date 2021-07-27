@@ -1,17 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pet_adoption/configurations.dart';
 import 'package:pet_adoption/models/pet.dart';
 import 'package:pet_adoption/models/user.dart';
 import 'package:pet_adoption/screens/homeScreen/components/add_pet_screen/add_pet_screen.dart';
 import 'package:pet_adoption/screens/homeScreen/components/adoption_screen/adoption_feed.dart';
-import 'package:pet_adoption/screens/homeScreen/components/favorites_screen/favorites_screen.dart';
 import 'package:pet_adoption/screens/homeScreen/components/top/top_nav_bar.dart';
 import 'package:pet_adoption/screens/petScreen/pet_screen.dart';
 import 'package:pet_adoption/services/cloud_firestore.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:pet_adoption/configurations.dart' as config;
+import 'components/favorites_screen/favorites_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final User user;
@@ -45,10 +43,12 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isFilterOpen = true;
   bool locationLoaded = false;
   bool petsLoaded = false;
+  bool favoritesLoaded = false;
 
   List<Pet> allPets = [];
   List<int> selectedFilterIndexes = [];
   List<Pet> filteredPets = [];
+  List<Pet> favorites = [];
 
   late String city = "";
   late String country = "";
@@ -62,7 +62,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   pet: pet,
                   user: user,
                 ))).then((context) {
-      setState(() {});
+      setState(() async {
+        await getFavorites();
+      });
     });
   }
 
@@ -130,6 +132,15 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       filteredPets = allPets;
       petsLoaded = true;
+    });
+  }
+
+  Future<void> getFavorites() async {
+    final String uid = widget.user.id;
+    final List<Pet> newFavorites = await CloudFirestore().fetchFavorites(uid);
+    setState(() {
+      favoritesLoaded = true;
+      favorites = newFavorites;
     });
   }
 
@@ -224,7 +235,9 @@ class _HomeScreenState extends State<HomeScreen> {
     Function isDrawerOpen,
   ) {
     return RefreshIndicator(
-      onRefresh: () async { await fetchPets(); },
+      onRefresh: () async {
+        await fetchPets();
+      },
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: Column(
@@ -233,7 +246,8 @@ class _HomeScreenState extends State<HomeScreen> {
             if (!petsLoaded)
               FutureBuilder(
                   future: fetchPets(),
-                  builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                  builder:
+                      (BuildContext context, AsyncSnapshot<void> snapshot) {
                     if (snapshot.hasError) {
                       return ErrorWidget(snapshot.hasError);
                     }
@@ -298,6 +312,49 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget getFavoritesScreen(
+    User user,
+    Function openDrawer,
+    Function closeDrawer,
+    Function isDrawerOpen,
+  ) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        setState(() async {
+          await getFavorites();
+        });
+      },
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Column(
+          children: [
+            ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
+            if (!favoritesLoaded)
+              FutureBuilder(
+                  future: getFavorites(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return FavoritesFeed(
+                        openPet: openPet,
+                        user: user,
+                        pets: favorites,
+                      );
+                    } else {
+                      return const CircularProgressIndicator();
+                    }
+                  })
+            else
+              FavoritesFeed(
+                openPet: openPet,
+                user: user,
+                pets: favorites,
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget getDonationScreen(
     User user,
     Function openDrawer,
@@ -308,22 +365,6 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         children: [
           ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
-        ],
-      ),
-    );
-  }
-
-  Widget getFavoritesScreen(
-    User user,
-    Function openDrawer,
-    Function closeDrawer,
-    Function isDrawerOpen,
-  ) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
-          FavoritesFeed(openPet: openPet, user: user),
         ],
       ),
     );

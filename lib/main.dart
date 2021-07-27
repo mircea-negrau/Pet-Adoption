@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:pet_adoption/screens/drawerScreen/drawer_screen.dart';
 import 'package:pet_adoption/screens/homeScreen/home_screen.dart';
 import 'package:pet_adoption/models/user.dart';
+import 'package:pet_adoption/screens/loadingScreen/loading_screen.dart';
 import 'package:pet_adoption/screens/loginScreen/login_screen.dart';
 import 'package:pet_adoption/services/authentication.dart';
 import 'package:pet_adoption/services/cloud_firestore.dart';
@@ -31,9 +32,7 @@ class App extends StatelessWidget {
           return Container(
             color: Colors.blueAccent,
             child: const Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.white,
-              ),
+              child: LoadingScreen(),
             ),
           );
         }
@@ -167,7 +166,7 @@ class _HomeState extends State<Home> {
               );
             }
           }
-          return const CircularProgressIndicator();
+          return const LoadingScreen();
         });
   }
 }

@@ -48,9 +48,11 @@ class AuthenticationService {
   Future<auth.UserCredential?> signInWithGoogle() async {
     final g_auth.GoogleSignInAccount googleUser =
         await g_auth.GoogleSignIn().signIn();
+    print(googleUser);
 
     final g_auth.GoogleSignInAuthentication googleAuth =
         await googleUser.authentication!;
+
 
     final credential = auth.GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
