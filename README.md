@@ -1,6 +1,6 @@
 # Pet Adoption
  
- Mobile Android Application built in Dart using Flutter.\
+ Mobile Android Platform built in Dart using Flutter for pet adoptions.\
  Google Firebase is used for: 
 - Authentication (Email/Password and Google)
 - Firestore Database for storing user accounts and pet posts
