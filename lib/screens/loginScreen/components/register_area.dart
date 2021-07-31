@@ -10,7 +10,7 @@ class RegisterArea extends StatelessWidget {
         text: "Don't have an account?  ",
         style: TextStyle(
           fontSize: 18.0,
-          color: Colors.grey.shade300.withOpacity(0.5),
+          color: Colors.grey.shade700,
         ),
         children: [
           TextSpan(

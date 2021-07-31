@@ -36,10 +36,11 @@ flutter:
   assets:
     - assets/
   fonts:
-    - family: Circular
+    - family: Poppins
       fonts:
-        - asset: fonts/CircularStd-Medium.ttf
-        - asset: fonts/CircularAir-Light.ttf
-          weight: 100
-        - asset: fonts/CircularStd-Bold.ttf
+        - asset: fonts/Poppins-Light.ttf
+          weight: 300
+        - asset: fonts/Poppins-Medium.ttf
           weight: 500
+        - asset: fonts/Poppins-Bold.ttf
+          weight: 700

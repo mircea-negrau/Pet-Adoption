@@ -149,6 +149,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.grey[700],
         items: const [
@@ -354,6 +355,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
                           Row(
                             children: [
                               AutoSizeTextField(
+                                minWidth: 45.0,
                                 controller: _breedTextController,
                                 decoration: const InputDecoration(
                                   border: InputBorder.none,
@@ -363,11 +365,11 @@ class _AddPetScreenState extends State<AddPetScreen> {
                                 fullwidth: false,
                                 style: TextStyle(
                                   fontSize: 15.0,
-                                  fontWeight: FontWeight.bold,
                                   color: Colors.grey[600],
                                   decoration: TextDecoration.none,
                                 ),
                               ),
+                              const SizedBox(width: 3.0),
                               PopupMenuButton(
                                 offset: const Offset(0.0, 40.0),
                                 itemBuilder: (BuildContext context) {
@@ -423,7 +425,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
                                   ];
                                 },
                                 child: Text(
-                                  _type == "" ? "|Species|" : _type,
+                                  _type == "" ? "Species" : _type,
                                   style: TextStyle(
                                     fontSize: 15.0,
                                     fontWeight: FontWeight.bold,
@@ -462,7 +464,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
                                         onTap: () {
                                           setState(
                                             () {
-                                              _timeValue = "month";
+                                              _timeValue = "months";
                                             },
                                           );
                                         },
@@ -474,7 +476,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
                                         onTap: () {
                                           setState(
                                             () {
-                                              _timeValue = "year";
+                                              _timeValue = "years";
                                             },
                                           );
                                         },
@@ -485,7 +487,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
                                 },
                                 child: Text(
                                   _timeValue == ""
-                                      ? "|TYPE|"
+                                      ? "time"
                                       : _timeValue.toLowerCase(),
                                   style: TextStyle(
                                     fontSize: 15.0,
@@ -494,6 +496,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
                                   ),
                                 ),
                               ),
+                              const SizedBox(width: 3.0),
                               Text(
                                 "old",
                                 style: TextStyle(
@@ -598,7 +601,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
                               hintText: 'Description',
                             ),
                             style: TextStyle(
-                              fontSize: 12.0,
+                              fontSize: 14.0,
                               color: Colors.grey[700],
                               decoration: TextDecoration.none,
                             ),

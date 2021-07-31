@@ -85,7 +85,7 @@ class OwnerDescription extends StatelessWidget {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           wordSpacing: 0.5,
-                          fontSize: 16.0,
+                          fontSize: 13.0,
                           color: Colors.grey[500],
                         ),
                       ),
