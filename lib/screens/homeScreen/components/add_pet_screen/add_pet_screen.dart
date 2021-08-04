@@ -147,8 +147,8 @@ class _AddPetScreenState extends State<AddPetScreen> {
       description: description,
       location: location,
       addedDate: addedDate,
-      longitude: widget.longitude,
-      latitude: widget.latitude,
+      longitude: longitude,
+      latitude: latitude,
       picture: "TBA",
     );
     return CloudFirestore().addPet(newPet, picture);
