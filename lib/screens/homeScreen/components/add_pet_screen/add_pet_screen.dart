@@ -9,15 +9,16 @@ import 'package:pet_adoption/models/pet.dart';
 import 'package:pet_adoption/models/user.dart';
 import 'package:pet_adoption/services/cloud_firestore.dart';
 import 'package:pet_adoption/services/date_time.dart';
+import 'package:geocoder/geocoder.dart';
 
 class AddPetScreen extends StatefulWidget {
   final User user;
   final Function openDrawer;
   final Function closeDrawer;
   final Function isDrawerOpen;
+  final Function setScreenToMain;
   final String address;
-  final String latitude;
-  final String longitude;
+  final Function getCoordinates;
 
   const AddPetScreen(
       {Key? key,
@@ -25,9 +26,9 @@ class AddPetScreen extends StatefulWidget {
       required this.openDrawer,
       required this.closeDrawer,
       required this.address,
-      required this.latitude,
-      required this.longitude,
-      required this.isDrawerOpen})
+      required this.isDrawerOpen,
+      required this.setScreenToMain,
+      required this.getCoordinates})
       : super(key: key);
 
   @override
@@ -94,31 +95,44 @@ class _AddPetScreenState extends State<AddPetScreen> {
 
   String _validateForm() {
     String error = "";
+    int counter = 0;
     if (_image.path.isEmpty) {
       error += "Please add an image. ";
+      counter++;
     }
     if (_nameTextController.text == "") {
       error += "Please add name. ";
+      counter++;
     }
     if (_sex == "") {
       error += "Please add sex. ";
+      counter++;
     }
     if (_breedTextController.text == "") {
       error += "Please add breed. ";
+      counter++;
     }
     if (_type == "") {
       error += "Please add species. ";
+      counter++;
     }
     if (_ageTextController.text == "") {
       error += "Please add age. ";
+      counter++;
     }
     if (_timeValue == "") {
       error += "Please select age (months/years). ";
+      counter++;
     }
     if (_descriptionTextController.text == "") {
       error += "Please add a description. ";
+      counter++;
     } else if (_descriptionTextController.text.length < 30) {
       error += "Please make the description longer than 30 characters. ";
+      counter++;
+    }
+    if (counter > 1) {
+      return "${error.split(".")[0]}${" [+$counter errors]"}";
     }
     return error;
   }
@@ -134,8 +148,8 @@ class _AddPetScreenState extends State<AddPetScreen> {
     final String ownerID = widget.user.id;
     final String addedDate = CustomDateTime().getCurrentDate();
     final String description = _descriptionTextController.text;
-    final String latitude = widget.latitude;
-    final String longitude = widget.longitude;
+    final String latitude = widget.getCoordinates().latitude.toString();
+    final String longitude = widget.getCoordinates().longitude.toString();
     final Pet newPet = Pet(
       id: "TBA",
       ownerID: ownerID,
@@ -177,7 +191,9 @@ class _AddPetScreenState extends State<AddPetScreen> {
             final String error = _validateForm();
             if (error == "") {
               if (await _publish()) {
-                print("SUCCESSFUL. IMPLEMENT PUSH TO MAIN PAGE.");
+                setState(() {
+                  widget.setScreenToMain();
+                });
               }
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -228,10 +244,15 @@ class _AddPetScreenState extends State<AddPetScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      icon: Icon(Icons.arrow_back_outlined,
-                          size: 30.0, color: Colors.grey.shade700),
+                      icon: widget.isDrawerOpen() == true
+                          ? Icon(Icons.arrow_forward_outlined,
+                              size: 30.0, color: Colors.grey.shade700)
+                          : Icon(Icons.arrow_back_outlined,
+                              size: 30.0, color: Colors.grey.shade700),
                       onPressed: () {
-                        widget.openDrawer();
+                        widget.isDrawerOpen() == true
+                            ? widget.closeDrawer()
+                            : widget.openDrawer();
                       },
                     ),
                     IconButton(
