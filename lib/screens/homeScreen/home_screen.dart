@@ -418,7 +418,6 @@ class _HomeScreenState extends State<HomeScreen> {
       physics: const AlwaysScrollableScrollPhysics(),
       child: Column(
         children: [
-          ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
           ProfileScreen(
               user: user,
               openDrawer: openDrawer,
