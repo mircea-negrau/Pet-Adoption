@@ -134,8 +134,8 @@ class _AddPetScreenState extends State<AddPetScreen> {
     final String ownerID = widget.user.id;
     final String addedDate = CustomDateTime().getCurrentDate();
     final String description = _descriptionTextController.text;
-    final String latitude = widget.address;
-    final String longitude ;
+    final String latitude = widget.latitude;
+    final String longitude = widget.longitude;
     final Pet newPet = Pet(
       id: "TBA",
       ownerID: ownerID,
