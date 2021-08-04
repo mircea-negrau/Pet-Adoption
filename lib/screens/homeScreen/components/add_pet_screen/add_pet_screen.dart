@@ -16,6 +16,8 @@ class AddPetScreen extends StatefulWidget {
   final Function closeDrawer;
   final Function isDrawerOpen;
   final String address;
+  final String latitude;
+  final String longitude;
 
   const AddPetScreen(
       {Key? key,
@@ -23,6 +25,8 @@ class AddPetScreen extends StatefulWidget {
       required this.openDrawer,
       required this.closeDrawer,
       required this.address,
+      required this.latitude,
+      required this.longitude,
       required this.isDrawerOpen})
       : super(key: key);
 
@@ -130,6 +134,8 @@ class _AddPetScreenState extends State<AddPetScreen> {
     final String ownerID = widget.user.id;
     final String addedDate = CustomDateTime().getCurrentDate();
     final String description = _descriptionTextController.text;
+    final String latitude = widget.address;
+    final String longitude ;
     final Pet newPet = Pet(
       id: "TBA",
       ownerID: ownerID,
@@ -141,6 +147,8 @@ class _AddPetScreenState extends State<AddPetScreen> {
       description: description,
       location: location,
       addedDate: addedDate,
+      longitude: widget.longitude,
+      latitude: widget.latitude,
       picture: "TBA",
     );
     return CloudFirestore().addPet(newPet, picture);

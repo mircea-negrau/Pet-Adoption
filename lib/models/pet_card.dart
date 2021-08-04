@@ -1,20 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:pet_adoption/configurations.dart';
 import 'package:pet_adoption/models/pet.dart';
 import 'package:pet_adoption/models/user.dart';
+import 'package:pet_adoption/services/geolocation.dart';
 
 class PetCard extends StatelessWidget {
   final Function openPet;
   final Pet pet;
   final User user;
+  final Coordinates coordinates;
 
   const PetCard(
-      {Key? key, required this.openPet, required this.pet, required this.user})
+      {Key? key,
+      required this.openPet,
+      required this.pet,
+      required this.user,
+      required this.coordinates})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final distance = coordinates.longitude == 0 && coordinates.latitude == 0
+        ? "TBA"
+        : GeolocationService()
+            .getDistance(pet.latitude, pet.longitude, coordinates);
     return GestureDetector(
       onTap: () {
         openPet(pet, user);
@@ -131,9 +142,9 @@ class PetCard extends StatelessWidget {
                         children: [
                           Flexible(
                             child: Text(
-                              "Distance: TBA",
+                              "Distance: $distance",
                               style: TextStyle(
-                                fontSize: 15.0,
+                                fontSize: 13.0,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.grey[500],
                               ),

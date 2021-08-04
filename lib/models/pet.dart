@@ -8,6 +8,8 @@ class Pet {
   String age;
   String location;
   String ownerID;
+  String latitude;
+  String longitude;
   String addedDate;
   String description;
 
@@ -23,5 +25,7 @@ class Pet {
     required this.ownerID,
     required this.addedDate,
     required this.description,
+    required this.latitude,
+    required this.longitude,
   });
 }

@@ -10,6 +10,7 @@ class LocationBar extends StatelessWidget {
   final Function setCountry;
   final Function setLocationLoaded;
   final Function setAddress;
+  final Function setCoordinates;
   final String country;
   final String city;
 
@@ -21,6 +22,7 @@ class LocationBar extends StatelessWidget {
       required this.setCountry,
       required this.setLocationLoaded,
       required this.setAddress,
+      required this.setCoordinates,
       required this.country,
       required this.city})
       : super(key: key);
@@ -63,7 +65,8 @@ class LocationBar extends StatelessWidget {
                 setCity: setCity,
                 setCountry: setCountry,
                 setLocationLoaded: setLocationLoaded,
-                  setAddress: setAddress,
+                setAddress: setAddress,
+                setCoordinates: setCoordinates,
               ),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {

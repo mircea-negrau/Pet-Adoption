@@ -10,6 +10,7 @@ import 'package:pet_adoption/services/cloud_firestore.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:pet_adoption/configurations.dart' as config;
 import 'components/favorites_screen/favorites_screen.dart';
+import 'package:geocoder/geocoder.dart';
 
 class HomeScreen extends StatefulWidget {
   final User user;
@@ -53,6 +54,10 @@ class _HomeScreenState extends State<HomeScreen> {
   late String city = "";
   late String country = "";
   late String address = "";
+  late String latitude = "";
+  late String longitude = "";
+
+  late Coordinates coordinates = Coordinates(0, 0);
 
   void openPet(Pet pet, User user) {
     Navigator.push(
@@ -93,6 +98,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void setAddress(String _address) {
     setState(() {
       address = _address;
+    });
+  }
+
+  void setCoordinates(Coordinates _coordinates) {
+    setState(() {
+      coordinates = _coordinates;
     });
   }
 
@@ -190,6 +201,8 @@ class _HomeScreenState extends State<HomeScreen> {
           closeDrawer: closeDrawer,
           isDrawerOpen: isDrawerOpen,
           address: address,
+          longitude: longitude,
+          latitude: latitude,
         );
       case 3:
         return getFavoritesScreen(user, openDrawer, closeDrawer, isDrawerOpen);
@@ -222,6 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
         closeDrawer: closeDrawer,
         setCity: setCity,
         setAddress: setAddress,
+        setCoordinates: setCoordinates,
         setLocationLoaded: setLocationLoaded,
       ),
       const SizedBox(height: 20.0)
@@ -270,6 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         openPet: openPet,
                         toggleFilter: toggleFilter,
                         pets: filteredPets,
+                        coordinates: coordinates,
                       );
                     }
                     return Shimmer.fromColors(
@@ -305,6 +320,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 openPet: openPet,
                 toggleFilter: toggleFilter,
                 pets: filteredPets,
+                coordinates: coordinates,
               ),
           ],
         ),
@@ -338,6 +354,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         openPet: openPet,
                         user: user,
                         pets: favorites,
+                        coordinates: coordinates,
                       );
                     } else {
                       return const CircularProgressIndicator();
@@ -348,6 +365,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 openPet: openPet,
                 user: user,
                 pets: favorites,
+                coordinates: coordinates,
               ),
           ],
         ),

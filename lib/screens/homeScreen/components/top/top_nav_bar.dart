@@ -14,6 +14,7 @@ class TopNavBar extends StatelessWidget {
   final Function setLocationLoaded;
   final Function isLocationSet;
   final Function setAddress;
+  final Function setCoordinates;
   final User user;
   final String city;
   final String country;
@@ -32,6 +33,7 @@ class TopNavBar extends StatelessWidget {
     required this.city,
     required this.country,
     required this.setAddress,
+    required this.setCoordinates,
   }) : super(key: key);
 
   @override
@@ -53,6 +55,7 @@ class TopNavBar extends StatelessWidget {
             setCountry: setCountry,
             setLocationLoaded: setLocationLoaded,
             setAddress: setAddress,
+            setCoordinates: setCoordinates,
             country: country,
             city: city,
           ),

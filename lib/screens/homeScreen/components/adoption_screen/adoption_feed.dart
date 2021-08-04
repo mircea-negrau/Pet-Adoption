@@ -4,6 +4,7 @@ import 'package:pet_adoption/models/user.dart';
 import 'package:pet_adoption/screens/homeScreen/components/adoption_screen/filter_bar.dart';
 import 'package:pet_adoption/models/pet_card.dart';
 import 'package:pet_adoption/screens/homeScreen/components/adoption_screen/search_bar.dart';
+import 'package:geocoder/geocoder.dart';
 
 class AdoptionFeed extends StatelessWidget {
   final bool isDrawerOpen;
@@ -23,6 +24,7 @@ class AdoptionFeed extends StatelessWidget {
   final String city;
   final String country;
   final List<Pet> pets;
+  final Coordinates coordinates;
 
   const AdoptionFeed({
     Key? key,
@@ -43,6 +45,7 @@ class AdoptionFeed extends StatelessWidget {
     required this.city,
     required this.country,
     required this.pets,
+    required this.coordinates,
   }) : super(key: key);
 
   List<Widget> getPetCards() {
@@ -51,6 +54,7 @@ class AdoptionFeed extends StatelessWidget {
               pet: pet,
               user: user,
               openPet: openPet,
+              coordinates: coordinates,
             ))
         .toList();
   }
