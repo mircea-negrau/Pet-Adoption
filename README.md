@@ -69,7 +69,7 @@ https://user-images.githubusercontent.com/74305289/127184451-eaf62ebf-1f71-430f-
 
 - [X] Show all pets
 - [X] Pet Cards showing name, gender, breed, species, age 
-- [ ] Pet Cards showing distance to current user
+- [X] Pet Cards showing distance to current user
 - [ ] Search bar
 - [X] Pet Page opening on Pet Card tap
 - [X] Pet details are neatly transitioned to their position upon tap using Hero widgets
