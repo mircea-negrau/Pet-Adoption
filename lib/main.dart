@@ -112,6 +112,12 @@ class _HomeState extends State<Home> {
     });
   }
 
+  void setScreenToMain(){
+    setState((){
+      selectedView = 0;
+    });
+  }
+
   bool getDrawerStatus() {
     return isDrawerOpen;
   }
@@ -159,6 +165,7 @@ class _HomeState extends State<Home> {
                       getScaleFactor: getScaleFactor,
                       getOffsetY: getOffsetY,
                       getOffsetX: getOffsetX,
+                      setScreenToMain: setScreenToMain,
                     ),
                   ],
                 ),

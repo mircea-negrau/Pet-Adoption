@@ -6,6 +6,7 @@ import 'package:pet_adoption/screens/homeScreen/components/add_pet_screen/add_pe
 import 'package:pet_adoption/screens/homeScreen/components/adoption_screen/adoption_feed.dart';
 import 'package:pet_adoption/screens/homeScreen/components/top/top_nav_bar.dart';
 import 'package:pet_adoption/screens/petScreen/pet_screen.dart';
+import 'package:pet_adoption/screens/profileScreen/profile_screen.dart';
 import 'package:pet_adoption/services/cloud_firestore.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:pet_adoption/configurations.dart' as config;
@@ -22,6 +23,7 @@ class HomeScreen extends StatefulWidget {
   final Function getOffsetX;
   final Function getOffsetY;
   final Function getScaleFactor;
+  final Function setScreenToMain;
 
   const HomeScreen(
       {Key? key,
@@ -33,7 +35,8 @@ class HomeScreen extends StatefulWidget {
       required this.isDrawerOpen,
       required this.getOffsetX,
       required this.getOffsetY,
-      required this.getScaleFactor})
+      required this.getScaleFactor,
+      required this.setScreenToMain})
       : super(key: key);
 
   @override
@@ -54,8 +57,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late String city = "";
   late String country = "";
   late String address = "";
-  late String latitude = "";
-  late String longitude = "";
 
   late Coordinates coordinates = Coordinates(0, 0);
 
@@ -105,6 +106,10 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       coordinates = _coordinates;
     });
+  }
+
+  Coordinates getCoordinates() {
+    return coordinates;
   }
 
   void toggleFilter() {
@@ -201,8 +206,8 @@ class _HomeScreenState extends State<HomeScreen> {
           closeDrawer: closeDrawer,
           isDrawerOpen: isDrawerOpen,
           address: address,
-          longitude: longitude,
-          latitude: latitude,
+          getCoordinates: getCoordinates,
+          setScreenToMain: widget.setScreenToMain,
         );
       case 3:
         return getFavoritesScreen(user, openDrawer, closeDrawer, isDrawerOpen);
@@ -410,9 +415,15 @@ class _HomeScreenState extends State<HomeScreen> {
     Function isDrawerOpen,
   ) {
     return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
       child: Column(
         children: [
           ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
+          ProfileScreen(
+              user: user,
+              openDrawer: openDrawer,
+              closeDrawer: closeDrawer,
+              isDrawerOpen: isDrawerOpen),
         ],
       ),
     );
