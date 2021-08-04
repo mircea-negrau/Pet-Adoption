@@ -90,6 +90,8 @@ class CloudFirestore {
         final String owner = doc["owner"].toString();
         final String description = doc["description"].toString();
         final String addedDate = doc["addedDate"].toString();
+        final String longitude = doc["longitude"].toString();
+        final String latitude = doc["latitude"].toString();
 
         pets.add(Pet(
           id: id,
@@ -103,6 +105,8 @@ class CloudFirestore {
           ownerID: owner,
           description: description,
           addedDate: addedDate,
+          longitude: longitude,
+          latitude: latitude,
         ));
       });
     });
@@ -129,6 +133,8 @@ class CloudFirestore {
     final String owner = pet["owner"].toString();
     final String description = pet["description"].toString();
     final String addedDate = pet["addedDate"].toString();
+    final String longitude = pet["longitude"].toString();
+    final String latitude = pet["latitude"].toString();
     return Pet(
       id: id,
       name: name,
@@ -141,6 +147,8 @@ class CloudFirestore {
       ownerID: owner,
       description: description,
       addedDate: addedDate,
+      longitude: longitude,
+      latitude: latitude,
     );
   }
 
