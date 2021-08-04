@@ -26,6 +26,8 @@ class CloudFirestore {
       "picture": photoURL,
       "type": pet.type,
       "addedDate": pet.addedDate,
+      "longitude": pet.longitude,
+      "latitude": pet.latitude,
     });
     return true;
   }
