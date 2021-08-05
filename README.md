@@ -42,7 +42,7 @@ https://user-images.githubusercontent.com/74305289/127185075-3310678e-0b0d-4648-
   - [X] Add pet page
   - [X] Favorites page
   - [ ] Messages page
-  - [ ] Profile page 
+  - [X] Profile page 
   - [ ] Settings page
   - [X] Log out 
 
