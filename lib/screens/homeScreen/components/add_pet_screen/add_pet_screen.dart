@@ -16,7 +16,7 @@ class AddPetScreen extends StatefulWidget {
   final Function openDrawer;
   final Function closeDrawer;
   final Function isDrawerOpen;
-  final Function setScreenToMain;
+  final Function changeView;
   final String address;
   final Function getCoordinates;
 
@@ -27,7 +27,7 @@ class AddPetScreen extends StatefulWidget {
       required this.closeDrawer,
       required this.address,
       required this.isDrawerOpen,
-      required this.setScreenToMain,
+      required this.changeView,
       required this.getCoordinates})
       : super(key: key);
 
@@ -192,7 +192,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
             if (error == "") {
               if (await _publish()) {
                 setState(() {
-                  widget.setScreenToMain();
+                  widget.changeView(0);
                 });
               }
             } else {
