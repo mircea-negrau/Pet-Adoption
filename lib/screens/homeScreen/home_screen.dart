@@ -431,6 +431,7 @@ class _HomeScreenState extends State<HomeScreen> {
       openDrawer: openDrawer,
       closeDrawer: closeDrawer,
       isDrawerOpen: isDrawerOpen,
+      changeView: widget.changeView,
     );
   }
 }
