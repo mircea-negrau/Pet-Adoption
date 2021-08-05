@@ -23,7 +23,7 @@ class HomeScreen extends StatefulWidget {
   final Function getOffsetX;
   final Function getOffsetY;
   final Function getScaleFactor;
-  final Function setScreenToMain;
+  final Function changeView;
 
   const HomeScreen(
       {Key? key,
@@ -36,7 +36,7 @@ class HomeScreen extends StatefulWidget {
       required this.getOffsetX,
       required this.getOffsetY,
       required this.getScaleFactor,
-      required this.setScreenToMain})
+      required this.changeView})
       : super(key: key);
 
   @override
@@ -67,10 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (context) => PetScreen(
                   pet: pet,
                   user: user,
-                ))).then((context) {
-      setState(() async {
-        await getFavorites();
-      });
+                ))).then((context) async {
+      await getFavorites();
     });
   }
 
@@ -168,6 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final Function isDrawerOpen = widget.isDrawerOpen;
     final Function openDrawer = widget.openDrawer;
     final Function closeDrawer = widget.closeDrawer;
+    final Function changeView = widget.changeView;
     final bool drawerIsOpen = isDrawerOpen() as bool;
     return AnimatedContainer(
       constraints: const BoxConstraints.expand(),
@@ -181,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(drawerIsOpen ? 70.0 : 0.0),
         child: SafeArea(
-          child: fetchView(openDrawer, closeDrawer, isDrawerOpen),
+          child: fetchView(openDrawer, closeDrawer, isDrawerOpen, changeView),
         ),
       ),
     );
@@ -191,14 +190,17 @@ class _HomeScreenState extends State<HomeScreen> {
     Function openDrawer,
     Function closeDrawer,
     Function isDrawerOpen,
+    Function changeView,
   ) {
     final User user = widget.user;
     final int selectedMenuIndex = widget.getView() as int;
     switch (selectedMenuIndex) {
       case 0:
-        return getAdoptionScreen(user, openDrawer, closeDrawer, isDrawerOpen);
+        return getAdoptionScreen(
+            user, openDrawer, closeDrawer, isDrawerOpen, changeView);
       case 1:
-        return getDonationScreen(user, openDrawer, closeDrawer, isDrawerOpen);
+        return getDonationScreen(
+            user, openDrawer, closeDrawer, isDrawerOpen, changeView);
       case 2:
         return AddPetScreen(
           user: user,
@@ -207,12 +209,14 @@ class _HomeScreenState extends State<HomeScreen> {
           isDrawerOpen: isDrawerOpen,
           address: address,
           getCoordinates: getCoordinates,
-          setScreenToMain: widget.setScreenToMain,
+          changeView: widget.changeView,
         );
       case 3:
-        return getFavoritesScreen(user, openDrawer, closeDrawer, isDrawerOpen);
+        return getFavoritesScreen(
+            user, openDrawer, closeDrawer, isDrawerOpen, changeView);
       case 4:
-        return getMessagesScreen(user, openDrawer, closeDrawer, isDrawerOpen);
+        return getMessagesScreen(
+            user, openDrawer, closeDrawer, isDrawerOpen, changeView);
       case 5:
         return getProfileScreen(user, openDrawer, closeDrawer, isDrawerOpen);
       default:
@@ -225,6 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Function openDrawer,
     Function closeDrawer,
     Function isDrawerOpen,
+    Function changeView,
   ) {
     return [
       const SizedBox(height: 20.0),
@@ -242,6 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
         setAddress: setAddress,
         setCoordinates: setCoordinates,
         setLocationLoaded: setLocationLoaded,
+        changeView: changeView,
       ),
       const SizedBox(height: 20.0)
     ];
@@ -252,6 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Function openDrawer,
     Function closeDrawer,
     Function isDrawerOpen,
+    Function changeView,
   ) {
     return RefreshIndicator(
       onRefresh: () async {
@@ -261,7 +268,8 @@ class _HomeScreenState extends State<HomeScreen> {
         physics: const AlwaysScrollableScrollPhysics(),
         child: Column(
           children: [
-            ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
+            ...getTopBar(
+                user, openDrawer, closeDrawer, isDrawerOpen, changeView),
             if (!petsLoaded)
               FutureBuilder(
                   future: fetchPets(),
@@ -338,6 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Function openDrawer,
     Function closeDrawer,
     Function isDrawerOpen,
+    Function changeView,
   ) {
     return RefreshIndicator(
       onRefresh: () async {
@@ -349,7 +358,8 @@ class _HomeScreenState extends State<HomeScreen> {
         physics: const AlwaysScrollableScrollPhysics(),
         child: Column(
           children: [
-            ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
+            ...getTopBar(
+                user, openDrawer, closeDrawer, isDrawerOpen, changeView),
             if (!favoritesLoaded)
               FutureBuilder(
                   future: getFavorites(),
@@ -383,11 +393,12 @@ class _HomeScreenState extends State<HomeScreen> {
     Function openDrawer,
     Function closeDrawer,
     Function isDrawerOpen,
+    Function changeView,
   ) {
     return SingleChildScrollView(
       child: Column(
         children: [
-          ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
+          ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen, changeView),
         ],
       ),
     );
@@ -398,11 +409,12 @@ class _HomeScreenState extends State<HomeScreen> {
     Function openDrawer,
     Function closeDrawer,
     Function isDrawerOpen,
+    Function changeView,
   ) {
     return SingleChildScrollView(
       child: Column(
         children: [
-          ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen),
+          ...getTopBar(user, openDrawer, closeDrawer, isDrawerOpen, changeView),
         ],
       ),
     );
@@ -419,10 +431,11 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         children: [
           ProfileScreen(
-              user: user,
-              openDrawer: openDrawer,
-              closeDrawer: closeDrawer,
-              isDrawerOpen: isDrawerOpen),
+            user: user,
+            openDrawer: openDrawer,
+            closeDrawer: closeDrawer,
+            isDrawerOpen: isDrawerOpen,
+          ),
         ],
       ),
     );
