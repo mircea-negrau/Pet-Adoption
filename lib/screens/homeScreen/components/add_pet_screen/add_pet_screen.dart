@@ -9,7 +9,6 @@ import 'package:pet_adoption/models/pet.dart';
 import 'package:pet_adoption/models/user.dart';
 import 'package:pet_adoption/services/cloud_firestore.dart';
 import 'package:pet_adoption/services/date_time.dart';
-import 'package:geocoder/geocoder.dart';
 
 class AddPetScreen extends StatefulWidget {
   final User user;
