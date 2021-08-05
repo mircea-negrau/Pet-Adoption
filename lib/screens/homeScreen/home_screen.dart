@@ -426,18 +426,11 @@ class _HomeScreenState extends State<HomeScreen> {
     Function closeDrawer,
     Function isDrawerOpen,
   ) {
-    return SingleChildScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      child: Column(
-        children: [
-          ProfileScreen(
-            user: user,
-            openDrawer: openDrawer,
-            closeDrawer: closeDrawer,
-            isDrawerOpen: isDrawerOpen,
-          ),
-        ],
-      ),
+    return ProfileScreen(
+      user: user,
+      openDrawer: openDrawer,
+      closeDrawer: closeDrawer,
+      isDrawerOpen: isDrawerOpen,
     );
   }
 }
