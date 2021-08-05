@@ -112,9 +112,9 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void setScreenToMain(){
+  void changeView(int index){
     setState((){
-      selectedView = 0;
+      selectedView = index;
     });
   }
 
@@ -165,7 +165,7 @@ class _HomeState extends State<Home> {
                       getScaleFactor: getScaleFactor,
                       getOffsetY: getOffsetY,
                       getOffsetX: getOffsetX,
-                      setScreenToMain: setScreenToMain,
+                      changeView: changeView,
                     ),
                   ],
                 ),
